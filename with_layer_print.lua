@@ -61,9 +61,9 @@ print(weights:size())
 
 local conv1 = cudnn.SpatialConvolution(3, 32, 5, 5)
 conv1:cuda()
-print('first layer: ' .. conv1)
+print(conv1)
 local output1 = conv1:forward(img)
-print('first layer output: ' .. output1:size())
+print(output1:size())
 
 local conv2 = nn.SpatialMaxPooling(2,2,2,2)
 conv2:cuda()
