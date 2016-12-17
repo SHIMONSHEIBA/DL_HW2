@@ -13,8 +13,8 @@ th Cifar10BinToTensor.lua
 require 'torch'
 require 'image'
 require 'nn'
---require 'cunn'
---require 'cudnn'
+require 'cunn'
+require 'cudnn'
 
 function saveTensorAsGrid(tensor,fileName) 
 	local padding = 1
