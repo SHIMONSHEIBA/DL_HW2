@@ -67,7 +67,7 @@ print('first layer output: ')
 local output1 = conv1:forward(img)
 print(output1:size())
 
-local conv2 = nn.SpatialMaxPooling(2,2,2,2)
+local conv2 = nn.SpatialMaxPooling(2,1,2,1)
 conv2:cuda()
 print('second layer: ')
 print(conv2)
