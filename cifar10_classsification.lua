@@ -16,12 +16,6 @@ require 'nn'
 require 'cunn'
 require 'cudnn'
 
-function saveTensorAsGrid(tensor,fileName) 
-	local padding = 1
-	local grid = image.toDisplayTensor(tensor/255.0, padding)
-	image.save(fileName,grid)
-end
-
 local trainset = torch.load('cifar.torch/cifar10-train.t7')
 local testset = torch.load('cifar.torch/cifar10-test.t7')
 
@@ -34,32 +28,6 @@ local testLabels = testset.label:float():add(1)
 
 print(trainData:size())
 
-saveTensorAsGrid(trainData:narrow(1,100,36),'train_100-136.jpg') -- display the 100-136 images in dataset
-print(classes[trainLabels[100]]) -- display the 100-th image class
-
-
---  *****************************************************************
---  Let's take a look at a simple convolutional layer:
---  *****************************************************************
-
-
-local img = trainData[100]:cuda()
-print(img:size())
-
-local conv = cudnn.SpatialConvolution(3, 16, 5, 5, 4, 4, 0, 0)
-conv:cuda()
--- 3 input maps, 16 output maps
--- 5x5 kernels, stride 4x4, padding 0x0
-
-print(conv)
-
-local output = conv:forward(img)
-print(output:size())
-saveTensorAsGrid(output, 'convOut.jpg')
-
-local weights = conv.weight
-saveTensorAsGrid(weights, 'convWeights.jpg')
-print(weights:size())
 
 --  ****************************************************************
 --  Full Example - Training a ConvNet on Cifar10
@@ -96,26 +64,26 @@ end
 
 local model = nn.Sequential()
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
-model:add(nn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
+model:add(nn.SpatialConvolution(3, 16, 3, 3, 1, 1, 1, 1)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 model:add(nn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 --model:add(cudnn.ReLU(true))                          -- ReLU activation function
-model:add(nn.ReLU(true))                          -- ReLU activation function
-model:add(nn.SpatialBatchNormalization(32))    --Batch normalization will provide quicker convergence
+model:add(nn.LeakyReLU(true))                          -- ReLU activation function
+model:add(nn.SpatialBatchNormalization(16))    --Batch normalization will provide quicker convergence
 --model:add(cudnn.SpatialConvolution(32, 64, 3, 3))
-model:add(nn.SpatialConvolution(32, 64, 3, 3))
+model:add(nn.SpatialConvolution(16, 16, 3, 3, 1, 1, 1, 1))
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))
 model:add(nn.SpatialMaxPooling(2,2,2,2))
 --model:add(cudnn.ReLU(true))
-model:add(nn.ReLU(true))
-model:add(nn.SpatialBatchNormalization(64))
+model:add(nn.LeakyReLU(true))
+model:add(nn.SpatialBatchNormalization(16))
 --model:add(cudnn.SpatialConvolution(64, 32, 3, 3))
-model:add(nn.SpatialConvolution(64, 32, 3, 3))
-model:add(nn.View(32*4*4):setNumInputDims(3))  -- reshapes from a 3D tensor of 32x4x4 into 1D tensor of 32*4*4
-model:add(nn.Linear(32*4*4, 256))             -- fully connected layer (matrix multiplication between input and weights)
+model:add(nn.SpatialConvolution(16, 32, 3, 3, 1, 1, 1, 1))
+model:add(nn.View(32*8*8):setNumInputDims(3))  -- reshapes from a 3D tensor of 32x4x4 into 1D tensor of 32*4*4
+model:add(nn.Linear(32*8*8, 256))             -- fully connected layer (matrix multiplication between input and weights)
 --model:add(cudnn.ReLU(true))
-model:add(nn.ReLU(true))
-model:add(nn.Dropout(0.5))                      --Dropout layer with p=0.5
+model:add(nn.LeakyReLU(true))
+model:add(nn.Dropout(0.2))                      --Dropout layer with p=0.5
 model:add(nn.Linear(256, #classes))            -- 10 is the number of outputs of the network (in this case, 10 digits)
 model:add(nn.LogSoftMax())                     -- converts the output to a log-probability. Useful for classificati
 
@@ -192,7 +160,7 @@ end
 
 ---------------------------------------------------------------------
 
-epochs = 25
+epochs = 60
 trainLoss = torch.Tensor(epochs)
 testLoss = torch.Tensor(epochs)
 trainError = torch.Tensor(epochs)
@@ -224,18 +192,18 @@ plotError(trainError, testError, 'Classification Error')
 --  ****************************************************************
 
 
-model:evaluate()   --turn off dropout
-
-print(classes[testLabels[10]])
-print(testData[10]:size())
-saveTensorAsGrid(testData[10],'testImg10.jpg')
-local predicted = model:forward(testData[10]:view(1,3,32,32):cuda())
-print(predicted:exp()) -- the output of the network is Log-Probabilities. To convert them to probabilities, you have to take e^x 
-
--- assigned a probability to each classes
-for i=1,predicted:size(2) do
-    print(classes[i],predicted[1][i])
-end
+--model:evaluate()   --turn off dropout
+--
+--print(classes[testLabels[10]])
+--print(testData[10]:size())
+--saveTensorAsGrid(testData[10],'testImg10.jpg')
+--local predicted = model:forward(testData[10]:view(1,3,32,32):cuda())
+--print(predicted:exp()) -- the output of the network is Log-Probabilities. To convert them to probabilities, you have to take e^x 
+--
+---- assigned a probability to each classes
+--for i=1,predicted:size(2) do
+--    print(classes[i],predicted[1][i])
+--end
 
 
 
