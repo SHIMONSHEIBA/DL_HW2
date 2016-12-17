@@ -43,7 +43,7 @@ print(classes[trainLabels[100]]) -- display the 100-th image class
 --  Let's take a look at a simple convolutional layer:
 --  *****************************************************************
 
-local img = trainData[100]:cuda --pick one picture
+local img = trainData[100] --pick one picture
 print(img:size())
 
 local conv = cudnn.SpatialConvolution(3, 16, 5, 5, 4, 4, 0, 0) --create convolution layer
