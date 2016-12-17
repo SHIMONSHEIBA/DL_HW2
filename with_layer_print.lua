@@ -94,8 +94,8 @@ end
 
 local model = nn.Sequential()
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
-model:add(nn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
-print(nn.SpatialConvolution(3, 32, 5, 5):cuda())
+model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
+print(cudnn.SpatialConvolution(3, 32, 5, 5):cuda())
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 model:add(nn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 print(nn.SpatialMaxPooling(2,2,2,2))
