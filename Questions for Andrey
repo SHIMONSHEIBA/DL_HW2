@@ -1,0 +1,13 @@
+1. augmantation-
+לא מצליח לאנדקס את ה-
+input
+גם ב-
+crop,
+וגם ב-
+hflip...
+
+2. CUDNN-נותן תוצאות טובות יותר? לא עובד
+
+3. how to calculate the 50000?
+
+4. droput in the middle , after conv layer
