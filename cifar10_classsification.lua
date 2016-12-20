@@ -40,11 +40,11 @@ do -- data augmentation module
   function BatchFlip:updateOutput(input)
     if self.train then
       local bs = input:size(1)
-      local flip_mask = torch.randperm(bs):le(bs/2)
+      local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
-        if flip_mask[i] % 2 == 1 then image.hflip(input[i],input[i]) end
+        --if flip_mask[i] % 2 == 1 then image.hflip(input[i]) end
 	--if flip_mask[i] % 2 == 1 then image.vflip(input[i]) end
-	--if flip_mask[i] % 2 == 1 then image.crop(input[i]) end
+	 if flip_mask[i] % 2 == 1 then image.crop(input[i]) end
 	--if flip_mask[i] % 2 == 1 then image.rotate(input[i],1.57079633) end
 	--if flip_mask[i] % 2 == 1 then image.minmax(input[i],) end
       end
