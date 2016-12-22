@@ -132,7 +132,7 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 128
+local batchSize = 16
 local optimState = {}
 
 function forwardNet(data,labels, train)
