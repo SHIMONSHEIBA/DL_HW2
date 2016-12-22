@@ -21,6 +21,27 @@ local testLabels = testset.label:float():add(1)
 
 print(trainData:size())
 
+do -- data augmentation module
+  local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
+
+  function BatchFlip2:__init()
+    parent.__init(self)
+    self.train = true
+  end
+
+  function BatchFlip2:updateOutput(input)
+    if self.train then
+      local bs = input:size(1)
+      local flip_mask = torch.randperm(bs):le(bs/2)
+      for i=1,input:size(1) do
+        if flip_mask[i] == 1 then image.hflip(input[i], input[i]) end
+      end
+    end
+    self.output:set(input)
+    return self.output
+  end
+end
+
 local function horizontal_reflection(x)
     return image.hflip(x)
 end
@@ -85,7 +106,7 @@ end
 --  ****************************************************************
 
 local model = nn.Sequential()
---model:add(nn.BatchFlip():float())
+model:add(nn.BatchFlip2():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialConvolution(3, 32, 5, 5, 1, 1, 2, 2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialBatchNormalization(32))    --Batch normalization will provide quicker convergence
