@@ -105,7 +105,7 @@ model:add(cudnn.SpatialMaxPooling(2,2,2,2))
 --model:add(cudnn.SpatialBatchNormalization(16))
 --model:add(nn.LeakyReLU(true))
 --model:add(cudnn.SpatialConvolution(64, 32, 3, 3))
-model:add(cudnn.SpatialConvolution(32, 16, 5, 5, 1, 1, 2, 2))
+model:add(cudnn.SpatialConvolution(32, 16, 5, 5, 2, 2, 2, 2))
 model:add(nn.View(16*4*4):setNumInputDims(3))  -- reshapes from a 3D tensor of 32x4x4 into 1D tensor of 32*4*4
 model:add(nn.Linear(16*4*4, 32))             -- fully connected layer (matrix multiplication between input and weights)
 --model:add(cudnn.ReLU(true))
