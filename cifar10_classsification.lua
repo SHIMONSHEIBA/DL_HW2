@@ -1,13 +1,6 @@
 --[[
 Due to interest of time, please prepared the data before-hand into a 4D torch
 ByteTensor of size 50000x3x32x32 (training) and 10000x3x32x32 (testing) 
-
-mkdir t5
-cd t5/
-git clone https://github.com/soumith/cifar.torch.git
-cd cifar.torch/
-th Cifar10BinToTensor.lua
-
 ]]
 
 require 'torch'
@@ -101,7 +94,7 @@ model:add(cudnn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
 model:add(cudnn.SpatialBatchNormalization(16))    --Batch normalization will provide quicker convergence
 model:add(nn.LeakyReLU(true))                          -- ReLU activation function
 --model:add(cudnn.SpatialConvolution(32, 64, 3, 3))
-model:add(cudnnnn.SpatialMaxPooling(2,2,2,2))
+model:add(cudnn.SpatialMaxPooling(2,2,2,2))
 model:add(cudnn.Dropout(0.2)) 
 model:add(cudnn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))
