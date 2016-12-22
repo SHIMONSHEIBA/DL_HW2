@@ -95,7 +95,7 @@ model:add(cudnn.SpatialBatchNormalization(16))    --Batch normalization will pro
 model:add(nn.LeakyReLU(true))                          -- ReLU activation function
 --model:add(cudnn.SpatialConvolution(32, 64, 3, 3))
 model:add(cudnn.SpatialMaxPooling(2,2,2,2))
-model:add(cudnn.Dropout(0.2)) 
+model:add(nn.Dropout(0.2)) 
 model:add(cudnn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))
 --model:add(cudnn.ReLU(true))
