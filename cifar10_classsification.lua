@@ -24,12 +24,12 @@ print(trainData:size())
 do -- data augmentation module
   local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
 
-  function BatchFlip2:__init()
+  function BatchFlip:__init()
     parent.__init(self)
     self.train = true
   end
 
-  function BatchFlip2:updateOutput(input)
+  function BatchFlip:updateOutput(input)
     if self.train then
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs):le(bs/2)
@@ -42,34 +42,34 @@ do -- data augmentation module
   end
 end
 
-local function horizontal_reflection(x)
-    return image.hflip(x)
-end
+--local function horizontal_reflection(x)
+--    return image.hflip(x)
+--end
 -------------------added data augmantation----------------------------------
-do -- data augmentation module
-  local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
+--do -- data augmentation module
+--  local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
 
-  function BatchFlip:__init()
-    parent.__init(self)
-    self.train = true
-  end
+--  function BatchFlip:__init()
+--    parent.__init(self)
+--    self.train = true
+--  end
 
-  function BatchFlip:updateOutput(input)
-    if self.train then
-      local bs = input:size(1)
-      local flip_mask = torch.randperm(bs)--:le(bs/2)
-      for i=1,input:size(1) do
-       	if (flip_mask[i] % 2 == 1) then horizontal_reflection(input[i]) end
-	--if flip_mask[i] % 2 == 1 then image.vflip(input[i]) end
-	--if flip_mask[i] % 2 == 1 then image.crop(input[i],tl,32,32) end
-	--if flip_mask[i] % 2 == 1 then image.rotate(input[i],1.57079633) end
-	--if flip_mask[i] % 2 == 1 then image.minmax(input[i],) end
-      end
-    end
-    self.output:set(input)
-    return self.output
-  end
-end
+--  function BatchFlip:updateOutput(input)
+--    if self.train then
+--      local bs = input:size(1)
+--      local flip_mask = torch.randperm(bs)--:le(bs/2)
+--      for i=1,input:size(1) do
+--       	if (flip_mask[i] % 2 == 1) then horizontal_reflection(input[i]) end
+--	--if flip_mask[i] % 2 == 1 then image.vflip(input[i]) end
+--	--if flip_mask[i] % 2 == 1 then image.crop(input[i],tl,32,32) end
+--	--if flip_mask[i] % 2 == 1 then image.rotate(input[i],1.57079633) end
+--	--if flip_mask[i] % 2 == 1 then image.minmax(input[i],) end
+--    end
+--    end
+--    self.output:set(input)
+--    return self.output
+--  end
+--end
 -----------------------------------------------------------------------------------
 
 --  ****************************************************************
