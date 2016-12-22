@@ -220,6 +220,7 @@ model:apply(function(l) l:reset() end)
 timer = torch.Timer()
 
 for e = 1, epochs do
+	print('start')
     trainData, trainLabels = shuffle(trainData, trainLabels) --shuffle training data
     trainLoss[e], trainError[e] = forwardNet(trainData, trainLabels, true)
     testLoss[e], testError[e], confusion = forwardNet(testData, testLabels, false)
