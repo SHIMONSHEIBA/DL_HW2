@@ -38,7 +38,7 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
-       	if (flip_mask[i] % 2 == 1) then horizontal_reflection(input[i]) end
+       	if (flip_mask[i] % 2 == 1) then image.hflip(input[i],input[i]) end
 	--if flip_mask[i] % 2 == 1 then image.vflip(input[i]) end
 	--if flip_mask[i] % 2 == 1 then image.crop(input[i],tl,32,32) end
 	--if flip_mask[i] % 2 == 1 then image.rotate(input[i],1.57079633) end
@@ -85,7 +85,7 @@ end
 --  ****************************************************************
 
 local model = nn.Sequential()
---model:add(nn.BatchFlip():float())
+model:add(nn.BatchFlip():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialConvolution(3, 32, 5, 5, 1, 1, 2, 2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialBatchNormalization(32))    --Batch normalization will provide quicker convergence
