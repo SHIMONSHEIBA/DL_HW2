@@ -135,9 +135,9 @@ vgg:cuda()
 criterion = nn.ClassNLLCriterion():cuda()
 
 
-w, dE_dw = model:getParameters()
+w, dE_dw = vgg:getParameters()
 print('Number of parameters:', w:nElement())
-print(model)
+print(vgg)
 
 function shuffle(data,ydata) --shuffle data function
     local RandOrder = torch.randperm(data:size(1)):long()
@@ -159,24 +159,24 @@ function forwardNet(data,labels, train)
     local numBatches = 0
     if train then
         --set network into training mode
-        model:training()
+        vgg:training()
     else
-        model:evaluate() -- turn of drop-out
+        vgg:evaluate() -- turn of drop-out
     end
     for i = 1, data:size(1) - batchSize, batchSize do
         numBatches = numBatches + 1
         local x = data:narrow(1, i, batchSize):cuda()
         local yt = labels:narrow(1, i, batchSize):cuda()
-        local y = model:forward(x)
+        local y = vgg:forward(x)
         local err = criterion:forward(y, yt)
         lossAcc = lossAcc + err
         confusion:batchAdd(y,yt)
         
         if train then
             function feval()
-                model:zeroGradParameters() --zero grads
+                vgg:zeroGradParameters() --zero grads
                 local dE_dy = criterion:backward(y,yt)
-                model:backward(x, dE_dy) -- backpropagation
+                vgg:backward(x, dE_dy) -- backpropagation
             
                 return err, dE_dw
             end
@@ -211,7 +211,7 @@ trainError = torch.Tensor(epochs)
 testError = torch.Tensor(epochs)
 
 --reset net weights
-model:apply(function(l) l:reset() end)
+vgg:apply(function(l) l:reset() end)
 
 timer = torch.Timer()
 
