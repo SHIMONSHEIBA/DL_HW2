@@ -85,7 +85,7 @@ end
 --  ****************************************************************
 
 local model = nn.Sequential()
-model:add(nn.BatchFlip():float())
+--model:add(nn.BatchFlip():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialConvolution(3, 30, 5, 5, 1, 1, 2, 2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialBatchNormalization(16))    --Batch normalization will provide quicker convergence
