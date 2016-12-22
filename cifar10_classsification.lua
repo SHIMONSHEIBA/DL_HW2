@@ -42,9 +42,9 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
-        --if flip_mask[i] % 2 == 1 then image.hflip(input[i]) end
+       	if flip_mask[i] % 2 == 1 then image.hflip(input[i]) end
 	--if flip_mask[i] % 2 == 1 then image.vflip(input[i]) end
-	 if flip_mask[i] % 2 == 1 then image.crop(input[i],tl,32,32) end
+	--if flip_mask[i] % 2 == 1 then image.crop(input[i],tl,32,32) end
 	--if flip_mask[i] % 2 == 1 then image.rotate(input[i],1.57079633) end
 	--if flip_mask[i] % 2 == 1 then image.minmax(input[i],) end
       end
@@ -94,22 +94,22 @@ local model = nn.Sequential()
 model:add(cudnn.SpatialConvolution(3, 16, 5, 5, 1, 1, 2, 2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialBatchNormalization(16))    --Batch normalization will provide quicker convergence
 model:add(nn.LeakyReLU(true))                          -- ReLU activation function
---model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
-model:add(nn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
+model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
+--model:add(nn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 --model:add(cudnn.ReLU(true))                          -- ReLU activation function
-model:add(nn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
-model:add(nn.SpatialBatchNormalization(16))    --Batch normalization will provide quicker convergence
+model:add(cudnn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
+model:add(cudnn.SpatialBatchNormalization(16))    --Batch normalization will provide quicker convergence
 model:add(nn.LeakyReLU(true))                          -- ReLU activation function
 --model:add(cudnn.SpatialConvolution(32, 64, 3, 3))
-model:add(nn.SpatialMaxPooling(2,2,2,2))
-model:add(nn.Dropout(0.2)) 
-model:add(nn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
+model:add(cudnnnn.SpatialMaxPooling(2,2,2,2))
+model:add(cudnn.Dropout(0.2)) 
+model:add(cudnn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))
 --model:add(cudnn.ReLU(true))
-model:add(nn.SpatialBatchNormalization(16))
+model:add(cudnn.SpatialBatchNormalization(16))
 model:add(nn.LeakyReLU(true))
 --model:add(cudnn.SpatialConvolution(64, 32, 3, 3))
-model:add(nn.SpatialConvolution(16, 32, 5, 5, 2, 2, 2, 2))
+model:add(cudnn.SpatialConvolution(16, 32, 5, 5, 2, 2, 2, 2))
 model:add(nn.View(32*4*4):setNumInputDims(3))  -- reshapes from a 3D tensor of 32x4x4 into 1D tensor of 32*4*4
 model:add(nn.Linear(32*4*4, 32))             -- fully connected layer (matrix multiplication between input and weights)
 --model:add(cudnn.ReLU(true))
