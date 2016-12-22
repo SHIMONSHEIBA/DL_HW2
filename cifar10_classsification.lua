@@ -114,7 +114,7 @@ model:add(nn.View(32*4*4):setNumInputDims(3))  -- reshapes from a 3D tensor of 3
 model:add(nn.Linear(32*4*4, 32))             -- fully connected layer (matrix multiplication between input and weights)
 --model:add(cudnn.ReLU(true))
 model:add(nn.LeakyReLU(true))
-model:add(nn.Dropout(0.2))                      --Dropout layer with p=0.5
+model:add(nn.Dropout(0.2))                      --Dropout layer with p=0.2
 model:add(nn.Linear(32, #classes))            -- 10 is the number of outputs of the network (in this case, 10 digits)
 model:add(nn.LogSoftMax())                     -- converts the output to a log-probability. Useful for classificati
 
@@ -243,22 +243,22 @@ plotError(trainError, testError, 'Classification Error')
 --  ****************************************************************
 
 
-local Weights_1st_Layer = model:get(1).weight
-local scaledWeights = image.scale(image.toDisplayTensor({input=Weights_1st_Layer,padding=2}),200)
-saveTensorAsGrid(scaledWeights,'Weights_1st_Layer.jpg')
+--local Weights_1st_Layer = model:get(1).weight
+--local scaledWeights = image.scale(image.toDisplayTensor({input=Weights_1st_Layer,padding=2}),200)
+--saveTensorAsGrid(scaledWeights,'Weights_1st_Layer.jpg')
 
 
-print('Input Image')
-saveTensorAsGrid(testData[100],'testImg100.jpg')
-model:forward(testData[100]:view(1,3,32,32):cuda())
-for l=1,9 do
-  print('Layer ' ,l, tostring(model:get(l)))
-  local layer_output = model:get(l).output[1]
-  saveTensorAsGrid(layer_output,'Layer'..l..'-'..tostring(model:get(l))..'.jpg')
-  if ( l == 5 or l == 9 )then
-	local Weights_lst_Layer = model:get(l).weight
-	local scaledWeights = image.scale(image.toDisplayTensor({input=Weights_lst_Layer[1],padding=2}),200)
-	saveTensorAsGrid(scaledWeights,'Weights_'..l..'st_Layer.jpg')
-  end 
-end
+--print('Input Image')
+--saveTensorAsGrid(testData[100],'testImg100.jpg')
+--model:forward(testData[100]:view(1,3,32,32):cuda())
+--for l=1,9 do
+--  print('Layer ' ,l, tostring(model:get(l)))
+--  local layer_output = model:get(l).output[1]
+--  saveTensorAsGrid(layer_output,'Layer'..l..'-'..tostring(model:get(l))..'.jpg')
+--  if ( l == 5 or l == 9 )then
+--	local Weights_lst_Layer = model:get(l).weight
+	--local scaledWeights = image.scale(image.toDisplayTensor({input=Weights_lst_Layer[1],padding=2}),200)
+	--saveTensorAsGrid(scaledWeights,'Weights_'..l..'st_Layer.jpg')
+  --end 
+--end
 
