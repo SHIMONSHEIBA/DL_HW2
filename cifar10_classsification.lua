@@ -63,7 +63,7 @@ do -- data augmentation module
 	if (flip_mask[i] % 5 == 1) then image.vflip(input[i]) end
 	if (flip_mask[i] % 5 == 2) then image.crop(input[i],tl,32,32) end
 	if (flip_mask[i] % 5 == 3) then image.rotate(input[i],1.57079633) end
-	if (flip_mask[i] % 5 == 4) then image.minmax(input[i],) end
+	--if (flip_mask[i] % 5 == 4) then image.minmax(input[i],) end
     end
     end
     self.output:set(input)
