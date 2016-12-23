@@ -59,7 +59,7 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
-       	if (flip_mask[i] % 2 == 0) then image.hflip(input[i], input[i]) end
+       	if (flip_mask[i] % 2 == 0) then image.hflip(input[i]) end
 	--if (flip_mask[i] % 2 == 0) then image.vflip(input[i]) end
 	--if (flip_mask[i] % 2 == 0) then image.crop(input[i],tl,32,32) end
 	--if (flip_mask[i] % 2 == 0) then image.rotate(input[i],1.57079633) end
