@@ -66,7 +66,7 @@ do -- data augmentation module
 	--if (flip_mask[i] % 5 == 4) then image.minmax(input[i],) end
     end
     end
-    self.output:set(input)
+    self.output:set(input:cuda())
     return self.output
   end
 end
