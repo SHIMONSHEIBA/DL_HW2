@@ -108,7 +108,7 @@ end
 local model = nn.Sequential()
 model:add(nn.BatchFlip():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
-model:add(cudnn.SpatialConvolution(3, 32, 5, 5, 1, 1, 2, 2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
+model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 --model:add(cudnn.SpatialBatchNormalization(32))    --Batch normalization will provide quicker convergence
 --model:add(nn.LeakyReLU(true))                          -- ReLU activation function
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
