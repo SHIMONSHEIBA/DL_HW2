@@ -114,7 +114,7 @@ model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 ou
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 --model:add(nn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 --model:add(cudnn.ReLU(true))                          -- ReLU activation function
---model:add(cudnn.SpatialConvolution(32, 32, 5, 5, 1, 1, 2, 2))
+model:add(cudnn.SpatialConvolution(32, 32, 5, 5))
 --model:add(cudnn.SpatialBatchNormalization(32))    --Batch normalization will provide quicker convergence
 --model:add(nn.LeakyReLU(true))                          -- ReLU activation function
 --model:add(cudnn.SpatialConvolution(32, 64, 3, 3))
