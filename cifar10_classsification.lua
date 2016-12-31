@@ -106,7 +106,7 @@ end
 --  ****************************************************************
 
 local model = nn.Sequential()
-model:add(nn.BatchFlip():float())
+--model:add(nn.BatchFlip():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialConvolution(3, 64, 5, 5,1,1,2,2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialBatchNormalization(64))    --Batch normalization will provide quicker convergence
@@ -156,7 +156,7 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 4
+local batchSize = 8
 local optimState = {}
 
 function forwardNet(data,labels, train)
@@ -179,9 +179,9 @@ function forwardNet(data,labels, train)
 	print('check5')
         numBatches = numBatches + 1
 	print('check6')
-        local x = data:narrow(1, i, batchSize)--:cuda()
+        local x = data:narrow(1, i, batchSize):cuda()
 	print('check7')
-        local yt = labels:narrow(1, i, batchSize)--:cuda()
+        local yt = labels:narrow(1, i, batchSize):cuda()
 	print('check8')
         local y = model:forward(x)
 	print('check9')
