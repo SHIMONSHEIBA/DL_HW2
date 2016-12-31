@@ -62,7 +62,7 @@ do -- data augmentation module
        	if (flip_mask[i] % 5 == 0) then image.hflip(input[i]) end
 	if (flip_mask[i] % 5 == 1) then image.vflip(input[i]) end
 	--if (flip_mask[i] % 5 == 2) then image.RandomCrop(input[i],tl,32,32) end
-	if (flip_mask[i] % 5 == 3) then image.rotate(input[i],1.57079633) end
+	if (flip_mask[i] % 5 == 2) then image.rotate(input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
     end
     end
@@ -189,6 +189,7 @@ function forwardNet(data,labels, train)
 	print(yt:max())
 	print(y:min())
 	print(y:max())
+	print(x:size(1))
 	print(y:size(1))
 	print(yt:size(1))
         local err = criterion:forward(y, yt)
