@@ -149,6 +149,8 @@ function forwardNet(data,labels, train)
         local x = data:narrow(1, i, batchSize):cuda()
         local yt = labels:narrow(1, i, batchSize):cuda()
         local y = model:forward(x)
+	print(y:size(1))
+	print(yt:size(1))
         local err = criterion:forward(y, yt)
         lossAcc = lossAcc + err
         confusion:batchAdd(y,yt)
