@@ -135,7 +135,7 @@ model:add(nn.View(#classes))  -- reshapes from a 3D tensor of 32x4x4 into 1D ten
 --model:add(cudnn.ReLU(true))
 --model:add(nn.LeakyReLU(true))
 --model:add(nn.Dropout(0.4))                      --Dropout layer with p=0.2
-model:add(nn.Linear(#classes, #classes))            -- 10 is the number of outputs of the network (in this case, 10 digits)
+--model:add(nn.Linear(#classes, #classes))            -- 10 is the number of outputs of the network (in this case, 10 digits)
 model:add(nn.LogSoftMax())                     -- converts the output to a log-probability. Useful for classificati
 
 model:cuda()
@@ -156,7 +156,7 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 16
+local batchSize = 4
 local optimState = {}
 
 function forwardNet(data,labels, train)
