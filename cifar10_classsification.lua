@@ -106,7 +106,7 @@ end
 --  ****************************************************************
 
 local model = nn.Sequential()
---model:add(nn.BatchFlip():float())
+model:add(nn.BatchFlip():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialConvolution(3, 64, 5, 5,1,1,2,2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialBatchNormalization(64))    --Batch normalization will provide quicker convergence
@@ -172,11 +172,13 @@ function forwardNet(data,labels, train)
     end
     for i = 1, data:size(1) - batchSize, batchSize do
         numBatches = numBatches + 1
-        local x = data:narrow(1, i, batchSize):cuda()
-        local yt = labels:narrow(1, i, batchSize):cuda()
+        local x = data:narrow(1, i, batchSize)--:cuda()
+        local yt = labels:narrow(1, i, batchSize)--:cuda()
         local y = model:forward(x)
         local err = criterion:forward(y, yt)
         lossAcc = lossAcc + err
+	print('y size: '.. size(y))
+	print('labels size: '.. size(yt))
         confusion:batchAdd(y,yt)
         
         if train then
