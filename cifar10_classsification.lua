@@ -180,6 +180,7 @@ function forwardNet(data,labels, train)
 	--print('y size: '.. y:size()..'.')
 	--print('labels size: '.. yt:size()..'.')
         confusion:batchAdd(y,yt)
+	print('check1')
         
         if train then
             function feval()
@@ -190,10 +191,11 @@ function forwardNet(data,labels, train)
                 return err, dE_dw
             end
         
+	print('check2')
             optim.adam(feval, w, optimState)
         end
     end
-    
+    print('check3')
     confusion:updateValids()
     local avgLoss = lossAcc / numBatches
     local avgError = 1 - confusion.totalValid
