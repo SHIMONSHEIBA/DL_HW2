@@ -177,8 +177,8 @@ function forwardNet(data,labels, train)
         local y = model:forward(x)
         local err = criterion:forward(y, yt)
         lossAcc = lossAcc + err
-	print('y size: '.. y:size()..'.')
-	print('labels size: '.. yt:size()..'.')
+	--print('y size: '.. y:size()..'.')
+	--print('labels size: '.. yt:size()..'.')
         confusion:batchAdd(y,yt)
         
         if train then
