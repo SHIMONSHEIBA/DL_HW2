@@ -136,8 +136,8 @@ model:add(nn.View(10))
 --  v.bias:zero()
 --end
 
-model:cuda()
-criterion = nn.ClassNLLCriterion():cuda()
+--model:cuda()
+criterion = nn.ClassNLLCriterion()--:cuda()
 
 
 w, dE_dw = model:getParameters()
