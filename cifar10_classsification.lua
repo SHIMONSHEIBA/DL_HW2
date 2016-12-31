@@ -161,26 +161,38 @@ local optimState = {}
 
 function forwardNet(data,labels, train)
     --another helpful function of optim is ConfusionMatrix
+	print('check0')
     local confusion = optim.ConfusionMatrix(classes)
+	print('check1')
     local lossAcc = 0
+	print('check2')
     local numBatches = 0
+	print('check3')
     if train then
         --set network into training mode
         model:training()
     else
         model:evaluate() -- turn of drop-out
     end
+	print('check4')
     for i = 1, data:size(1) - batchSize, batchSize do
+	print('check5')
         numBatches = numBatches + 1
+	print('check6')
         local x = data:narrow(1, i, batchSize)--:cuda()
+	print('check7')
         local yt = labels:narrow(1, i, batchSize)--:cuda()
+	print('check8')
         local y = model:forward(x)
+	print('check9')
         local err = criterion:forward(y, yt)
+	print('check10')
         lossAcc = lossAcc + err
+	print('check11')
 	--print('y size: '.. y:size()..'.')
 	--print('labels size: '.. yt:size()..'.')
         confusion:batchAdd(y,yt)
-	print('check1')
+	print('check12')
         
         if train then
             function feval()
@@ -191,11 +203,11 @@ function forwardNet(data,labels, train)
                 return err, dE_dw
             end
         
-	print('check2')
+	print('check13')
             optim.adam(feval, w, optimState)
         end
     end
-    print('check3')
+    print('check14')
     confusion:updateValids()
     local avgLoss = lossAcc / numBatches
     local avgError = 1 - confusion.totalValid
