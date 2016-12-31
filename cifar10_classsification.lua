@@ -185,6 +185,8 @@ function forwardNet(data,labels, train)
 	print('check8')
         local y = model:forward(x)
 	print('check9')
+	print(yt:min())
+	print(yt:max())
         local err = criterion:forward(y, yt)
 	print('check10')
         lossAcc = lossAcc + err
