@@ -156,7 +156,7 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 16
+local batchSize = 128
 local optimState = {}
 
 function forwardNet(data,labels, train)
@@ -213,7 +213,7 @@ end
 
 ---------------------------------------------------------------------
 
-epochs = 60
+epochs = 100
 trainLoss = torch.Tensor(epochs)
 testLoss = torch.Tensor(epochs)
 trainError = torch.Tensor(epochs)
