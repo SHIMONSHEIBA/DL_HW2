@@ -131,10 +131,10 @@ Block(192,10,1,1)
 model:add(nn.SpatialAveragePooling(8,8,1,1):ceil())
 model:add(nn.View(10))
 
---for k,v in pairs(model:findModules(('%s.SpatialConvolution'):format(backend_name))) do
---  v.weight:normal(0,0.05)
---  v.bias:zero()
---end
+for k,v in pairs(model:findModules(('%s.SpatialConvolution'):format(backend_name))) do
+  v.weight:normal(0,0.05)
+  v.bias:zero()
+end
 
 --model:cuda()
 criterion = nn.ClassNLLCriterion()--:cuda()
