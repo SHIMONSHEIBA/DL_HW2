@@ -61,9 +61,9 @@ do -- data augmentation module
       for i=1,input:size(1) do
        	if (flip_mask[i] % 6 == 0) then image.hflip(input[i]) end
 	if (flip_mask[i] % 6 == 1) then image.vflip(input[i]) end
-	if (flip_mask[i] % 6 == 2) then image.crop(input[i],tl,32,32) end
+	--if (flip_mask[i] % 6 == 2) then image.crop(input[i],tl,32,32) end
 	if (flip_mask[i] % 6 == 3) then image.rotate(input[i],1.57079633) end
-	if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
+	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
     end
     end
     self.output:set(input:cuda())
@@ -173,6 +173,9 @@ function forwardNet(data,labels, train)
         local x = data:narrow(1, i, batchSize)--:cuda()
         local yt = labels:narrow(1, i, batchSize)--:cuda()
         local y = model:forward(x)
+	print(x:size())
+	print(y:size())
+	print(yt:size())
         local err = criterion:forward(y, yt)
         lossAcc = lossAcc + err
         confusion:batchAdd(y,yt)
