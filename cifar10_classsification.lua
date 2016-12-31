@@ -61,7 +61,7 @@ do -- data augmentation module
       for i=1,input:size(1) do
        	if (flip_mask[i] % 5 == 0) then image.hflip(input[i]) end
 	if (flip_mask[i] % 5 == 1) then image.vflip(input[i]) end
-	if (flip_mask[i] % 5 == 2) then image.RandomCrop(input[i],tl,32,32) end
+	--if (flip_mask[i] % 5 == 2) then image.RandomCrop(input[i],tl,32,32) end
 	if (flip_mask[i] % 5 == 3) then image.rotate(input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
     end
