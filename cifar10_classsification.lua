@@ -194,7 +194,6 @@ function forwardNet(data,labels, train)
 	print(yt:size(1))
 	print(x:size(2))
 	print(y:size(2))
-	print(yt:size(2))
         local err = criterion:forward(y, yt)
 	print('check10')
         lossAcc = lossAcc + err
