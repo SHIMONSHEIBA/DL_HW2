@@ -106,7 +106,7 @@ end
 --  ****************************************************************
 
 local model = nn.Sequential()
-model:add(nn.BatchFlip():float())
+--model:add(nn.BatchFlip():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialConvolution(3, 64, 5, 5,1,1,2,2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
 model:add(cudnn.SpatialBatchNormalization(64))    --Batch normalization will provide quicker convergence
@@ -156,7 +156,7 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 128
+local batchSize = 16
 local optimState = {}
 
 function forwardNet(data,labels, train)
@@ -233,7 +233,7 @@ end
 
 ---------------------------------------------------------------------
 
-epochs = 100
+epochs = 60
 trainLoss = torch.Tensor(epochs)
 testLoss = torch.Tensor(epochs)
 trainError = torch.Tensor(epochs)
