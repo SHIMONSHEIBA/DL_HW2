@@ -59,8 +59,8 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
-       	if (flip_mask[i] % 2 == 0) then image.hflip(input[i]) end
-	--if (flip_mask[i] % 5 == 1) then image.vflip(input[i]) end
+       	if (flip_mask[i] % 3 == 0) then image.hflip(input[i]) end
+	if (flip_mask[i] % 3 == 1) then image.vflip(input[i]) end
 	--if (flip_mask[i] % 5 == 2) then image.RandomCrop(input[i],tl,32,32) end
 	--if (flip_mask[i] % 5 == 2) then image.rotate(input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
@@ -162,47 +162,47 @@ local optimState = {}
 
 function forwardNet(data,labels, train)
     --another helpful function of optim is ConfusionMatrix
-	print('check0')
+	--print('check0')
     local confusion = optim.ConfusionMatrix(classes)
-	print('check1')
+	--print('check1')
     local lossAcc = 0
-	print('check2')
+	--print('check2')
     local numBatches = 0
-	print('check3')
+	--print('check3')
     if train then
         --set network into training mode
         model:training()
     else
         model:evaluate() -- turn of drop-out
     end
-	print('check4')
+	--print('check4')
     for i = 1, data:size(1) - batchSize, batchSize do
-	print('check5')
+	--print('check5')
         numBatches = numBatches + 1
-	print('check6')
+	--print('check6')
         local x = data:narrow(1, i, batchSize)--:cuda()
-	print('check7')
+	--print('check7')
         local yt = labels:narrow(1, i, batchSize)--:cuda()
-	print('check8')
+	--print('check8')
         local y = model:forward(x)
-	print('check9')
-	print(yt:min())
-	print(yt:max())
-	print(y:min())
-	print(y:max())
-	print(x:size(1))
-	print(y:size(1))
-	print(yt:size(1))
-	print(x:size(2))
-	print(y:size(2))
+	--print('check9')
+	--print(yt:min())
+	--print(yt:max())
+	--print(y:min())
+	--print(y:max())
+	--print(x:size(1))
+	--print(y:size(1))
+	--print(yt:size(1))
+	--print(x:size(2))
+	--print(y:size(2))
         local err = criterion:forward(y, yt)
-	print('check10')
+	--print('check10')
         lossAcc = lossAcc + err
-	print('check11')
+	--print('check11')
 	--print('y size: '.. y:size()..'.')
 	--print('labels size: '.. yt:size()..'.')
         confusion:batchAdd(y,yt)
-	print('check12')
+	--print('check12')
         
         if train then
             function feval()
@@ -213,11 +213,11 @@ function forwardNet(data,labels, train)
                 return err, dE_dw
             end
         
-	print('check13')
+	--print('check13')
             optim.adam(feval, w, optimState)
         end
     end
-    print('check14')
+   -- print('check14')
     confusion:updateValids()
     local avgLoss = lossAcc / numBatches
     local avgError = 1 - confusion.totalValid
