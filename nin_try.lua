@@ -306,7 +306,7 @@ for e = 1, epochs do
    end
    
    if e == 1 then
-      local bestError = testError[e]
+      bestError = testError[e]
    end
 
 local WritetrainError = trainError[e]
