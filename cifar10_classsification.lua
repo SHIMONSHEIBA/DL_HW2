@@ -238,7 +238,7 @@ end
 
 ---------------------------------------------------------------------
 
-epochs = 60
+epochs = 100
 trainLoss = torch.Tensor(epochs)
 testLoss = torch.Tensor(epochs)
 trainError = torch.Tensor(epochs)
