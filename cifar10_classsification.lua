@@ -56,7 +56,7 @@ do -- data augmentation module
 
   function BatchFlip:updateOutput(input)
     if self.train then
-      local self.output:set(input:cuda())
+      local output:set(input:cuda())
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
@@ -68,7 +68,7 @@ do -- data augmentation module
     end
     end
     --self.output:set(input:cuda())
-    return self.output
+    return output
   end
 end
 -----------------------------------------------------------------------------------
