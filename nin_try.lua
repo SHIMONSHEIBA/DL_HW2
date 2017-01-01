@@ -313,15 +313,23 @@ for e = 1, epochs do
 	    torch.save('ConvClassifierModel.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ':')
-	    f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e]'\n')
-	    f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e]'\n')
+	    trainError = trainError[e]
+	    trainLoss = trainLoss[e] 
+	    testError = testError[e]
+	    testLoss = testLoss[e]
+	    f:write('Training error: ' .. trainError .. , 'Training Loss: ' .. trainLoss .. '\n')
+	    f:write('Test error: ' .. testError .., 'Test Loss: ' .. testLoss ..'\n')
 	end
     else
        print('save the model')
        torch.save('ConvClassifierModel.t7', model)
        f:write('Epoc ' .. e .. ':')
-       f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e]'\n')
-       f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e]'\n')
+       trainError = trainError[e]
+       trainLoss = trainLoss[e] 
+       testError = testError[e]
+       testLoss = testLoss[e]
+       f:write('Training error: ' .. trainError .. , 'Training Loss: ' .. trainLoss .. '\n')
+       f:write('Test error: ' .. testError .., 'Test Loss: ' .. testLoss ..'\n')
     end
 	
 end
