@@ -140,7 +140,8 @@ model:add(nn.View(#classes))  -- reshapes from a 3D tensor of 32x4x4 into 1D ten
 model:add(nn.LogSoftMax())                     -- converts the output to a log-probability. Useful for classificati
 
 model:cuda()
-criterion = nn.ClassNLLCriterion():cuda()
+--criterion = nn.ClassNLLCriterion():cuda()
+criterion = nn.CrossEntropyCriterion():cuda()
 
 
 w, dE_dw = model:getParameters()
