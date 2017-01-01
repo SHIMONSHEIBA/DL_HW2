@@ -176,7 +176,7 @@ function forwardNet(data,labels, train)
         --set network into training mode
         model:training()
     else
-		printf('evaluate')
+		print('evaluate')
 		io.read()
         model:evaluate() -- turn of drop-out
     end
