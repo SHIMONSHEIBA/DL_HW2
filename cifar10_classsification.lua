@@ -60,13 +60,12 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
-       	--if (flip_mask[i] % 2 == 0) then
-	self.output[i] = image.hflip(input[i]) end
-	--if (flip_mask[i] % 6 == 1) then image.vflip(self.output[i], input[i]) end
+       	if (flip_mask[i] % 3 == 0) then self.output[i] = image.hflip(input[i]) end
+	if (flip_mask[i] % 3 == 1) then self.output[i] = image.vflip(input[i]) end
 	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],tl,32,32) end
-	--if (flip_mask[i] % 6 == 3) then image.rotate(self.output[i], input[i],1.57079633) end
+	if (flip_mask[i] % 3 == 2) then self.output[i] = image.rotate(input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
-    --end
+    end
     end
     --self.output:set(input:cuda())
     return self.output
