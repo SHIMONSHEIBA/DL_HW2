@@ -307,6 +307,10 @@ for e = 1, epochs do
       local bestError = testError[e]
    end
 
+local WritetrainError = trainError[e]
+local WritetrainLoss = trainLoss[e] 
+local WritetestError = testError[e]
+local WritetestLoss = testLoss[e]
 local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
    if e > 1 then
 	if (testError[e] < bestError) then
@@ -315,23 +319,23 @@ local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
 	    torch.save('ConvClassifierModel.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
-	    trainError = trainError[e]
-	    trainLoss = trainLoss[e] 
-	    testError = testError[e]
-	    testLoss = testLoss[e]
-	    f:write('Training error: ' .. trainError ..  'Training Loss: ' .. trainLoss .. '\n')
-	    f:write('Test error: ' .. testError .. 'Test Loss: ' .. testLoss ..'\n')
+	    WritetrainError = trainError[e]
+	    WritetrainLoss = trainLoss[e] 
+	    WritetestError = testError[e]
+	    WritetestLoss = testLoss[e]
+	    f:write('Training error: ' .. WritetrainError ..  ' Training Loss: ' .. WritetrainLoss .. '\n')
+	    f:write('Test error: ' .. WritetestError .. ' Test Loss: ' .. WritetestLoss ..'\n')
 	end
     else
        print('save the model')
        torch.save('ConvClassifierModel.t7', model)
        f:write('Epoc ' .. e .. ': \n')
-       trainError = trainError[e]
-       trainLoss = trainLoss[e] 
-       testError = testError[e]
-       testLoss = testLoss[e]
-       f:write('Training error: ' .. trainError ..  'Training Loss: ' .. trainLoss .. '\n')
-       f:write('Test error: ' .. testError .. 'Test Loss: ' .. testLoss ..'\n')
+       WritetrainError = trainError[e]
+       WritetrainLoss = trainLoss[e] 
+       WritetestError = testError[e]
+       WritetestLoss = testLoss[e]
+       f:write('Training error: ' .. WritetrainError ..  ' Training Loss: ' .. WritetrainLoss .. '\n')
+       f:write('Test error: ' .. WritetestError .. ' Test Loss: ' .. WritetestLoss ..'\n')
     end
     f:close()	
 end
