@@ -71,7 +71,7 @@ do -- data augmentation module
     end
     end
     self.output:set(input:cuda())
-    return self.output:cuda()
+    return self.output
   end
 end
 -----------------------------------------------------------------------------------
@@ -131,14 +131,14 @@ model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
 model:add(nn.Dropout())
 Block(192,192,3,3,1,1,1,1)
 Block(192,192,1,1)
-Block(192,10,1,1)
+Block(192,#classes,1,1)
 model:add(cudnn.SpatialAveragePooling(8,8,1,1):ceil())
-model:add(nn.View(10))
+model:add(nn.View(#classes))
 
-for k,v in pairs(model:findModules(('%s.SpatialConvolution'):format(backend_name))) do
-  v.weight:normal(0,0.05)
-  v.bias:zero()
-end
+--for k,v in pairs(model:findModules(('%s.SpatialConvolution'):format(backend_name))) do
+  --v.weight:normal(0,0.05)
+  --v.bias:zero()
+--end
 
 model:cuda()
 --criterion = nn.ClassNLLCriterion():cuda()
