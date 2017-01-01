@@ -317,8 +317,8 @@ for e = 1, epochs do
 	    trainLoss = trainLoss[e] 
 	    testError = testError[e]
 	    testLoss = testLoss[e]
-	    f:write('Training error: ' .. trainError .. , 'Training Loss: ' .. trainLoss .. '\n')
-	    f:write('Test error: ' .. testError .., 'Test Loss: ' .. testLoss ..'\n')
+	    f:write('Training error: ' .. trainError ..  'Training Loss: ' .. trainLoss .. '\n')
+	    f:write('Test error: ' .. testError .. 'Test Loss: ' .. testLoss ..'\n')
 	end
     else
        print('save the model')
@@ -328,8 +328,8 @@ for e = 1, epochs do
        trainLoss = trainLoss[e] 
        testError = testError[e]
        testLoss = testLoss[e]
-       f:write('Training error: ' .. trainError .. , 'Training Loss: ' .. trainLoss .. '\n')
-       f:write('Test error: ' .. testError .., 'Test Loss: ' .. testLoss ..'\n')
+       f:write('Training error: ' .. trainError ..  'Training Loss: ' .. trainLoss .. '\n')
+       f:write('Test error: ' .. testError .. 'Test Loss: ' .. testLoss ..'\n')
     end
 	
 end
