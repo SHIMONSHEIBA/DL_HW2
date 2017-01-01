@@ -111,14 +111,14 @@ end
 
 local model = nn.Sequential()
 
-local function Block(...)
-  local arg = {...}
-  model:add(cudnn.SpatialConvolution(...))
-  model:add(cudnn.SpatialBatchNormalization(arg[2]))--,1e-3))
-  model:add(nn.ReLU(true))
-  return model
-end
-
+--local function Block(...)
+  --local arg = {...}
+  --model:add(cudnn.SpatialConvolution(...))
+  --model:add(cudnn.SpatialBatchNormalization(arg[2]))--,1e-3))
+  --model:add(nn.ReLU(true))
+  --return model
+--end
+model:add(nn.BatchFlip():float())
 model:add(cudnn.SpatialConvolution(3,192,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(192))--,1e-3))
 model:add(nn.ReLU(true))
