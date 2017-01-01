@@ -141,10 +141,10 @@ model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
 model:add(nn.Dropout())
-model:add(cudnn.SpatialConvolution(32,32,3,3,1,1,1,1))
-model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
+model:add(cudnn.SpatialConvolution(32,24,3,3,1,1,1,1))
+model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
 model:add(nn.ReLU(true))
-model:add(cudnn.SpatialConvolution(32,24,1,1))
+model:add(cudnn.SpatialConvolution(24,24,1,1))
 model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(24,#classes,1,1))
@@ -160,12 +160,23 @@ model:add(nn.View(#classes))
 
 model:cuda()
 --criterion = nn.ClassNLLCriterion():cuda()
-criterion = nn.CrossEntropyCriterion():cuda()
+criterionName = CrossEntropyCriterion
+criterion = nn.criterionName():cuda()
 
 
 w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
+
+local f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
+   f:write('The model is: ')
+   f:write(model)
+   f:write('Number of parameters: ')
+   f:write(w:nElement())
+   f:write('The criterion is: ')
+   f:write(criterionName)
+   f:write('optim function: ')
+   f:write('adam')
 
 function shuffle(data,ydata) --shuffle data function
     local RandOrder = torch.randperm(data:size(1)):long()
@@ -272,7 +283,6 @@ timer = torch.Timer()
 
 for e = 1, epochs do
     print('start epoc ' .. e .. ':')
-    local f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
     f:write('Epoc ' .. e .. ':')
 	
     trainData, trainLabels = shuffle(trainData, trainLabels) --shuffle training data
@@ -297,7 +307,6 @@ for e = 1, epochs do
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e])
 	    f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e])
-            f:close()
 	end
     end
 	
@@ -305,6 +314,7 @@ end
 
 plotError(trainError, testError, 'Classification Error')
 
+f:close()
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
