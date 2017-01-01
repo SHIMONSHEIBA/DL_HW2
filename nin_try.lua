@@ -194,7 +194,8 @@ require 'optim'
 
 local batchSize = 128
 f:write('batchSize: ')
-f:write(batchSize'\n')
+f:write(batchSize)
+f:write('\n')
 f:close()
 local optimState = {}
 
