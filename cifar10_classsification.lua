@@ -238,7 +238,7 @@ end
 
 ---------------------------------------------------------------------
 
-epochs = 100
+epochs = 200
 trainLoss = torch.Tensor(epochs)
 testLoss = torch.Tensor(epochs)
 trainError = torch.Tensor(epochs)
@@ -264,6 +264,21 @@ for e = 1, epochs do
 end
 
 plotError(trainError, testError, 'Classification Error')
+
+
+require 'gnuplot'
+local range = torch.range(1, epochs)
+gnuplot.pngfigure('loss.png')
+gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
+gnuplot.xlabel('epochs')
+gnuplot.ylabel('Loss')
+gnuplot.plotflush()
+
+gnuplot.pngfigure('error.png')
+gnuplot.plot({'trainError',trainError},{'testError',testError})
+gnuplot.xlabel('epochs')
+gnuplot.ylabel('Error')
+gnuplot.plotflush()
 
 
 --  ****************************************************************
