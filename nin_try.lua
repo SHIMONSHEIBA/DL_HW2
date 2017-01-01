@@ -169,7 +169,9 @@ print('Number of parameters:', w:nElement())
 print(model)
 
 local f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
+ print('open the file')
    f:write('The model is: ')
+print('start print to the log')
    f:write(model)
    f:write('Number of parameters: ')
    f:write(w:nElement())
@@ -303,6 +305,7 @@ for e = 1, epochs do
 	
    if e > 1 then
 	if (testError[e] > testError[e-1]) then
+	    print('save the model')
 	    torch.save('ConvClassifierModel.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e])
