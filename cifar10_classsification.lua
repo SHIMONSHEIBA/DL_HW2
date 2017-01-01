@@ -179,7 +179,7 @@ function forwardNet(data,labels, train)
         model:training()
     else
 		print('evaluate')
-		io.read()
+		--io.read()
         model:evaluate() -- turn of drop-out
     end
 	--print('check4')
