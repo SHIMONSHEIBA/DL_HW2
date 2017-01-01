@@ -125,29 +125,29 @@ model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(16,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
-model:add(cudnn.SpatialConvolution(32,48,1,1))
-model:add(cudnn.SpatialBatchNormalization(48))--,1e-3))
+model:add(cudnn.SpatialConvolution(32,64,1,1))
+model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
 model:add(nn.Dropout())
-model:add(cudnn.SpatialConvolution(48,64,5,5,1,1,2,2))
+model:add(cudnn.SpatialConvolution(64,80,5,5,1,1,2,2))
+model:add(cudnn.SpatialBatchNormalization(80))--,1e-3))
+model:add(nn.ReLU(true))
+model:add(cudnn.SpatialConvolution(80,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(64,48,1,1))
 model:add(cudnn.SpatialBatchNormalization(48))--,1e-3))
 model:add(nn.ReLU(true))
-model:add(cudnn.SpatialConvolution(48,32,1,1))
-model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.ReLU(true))
 model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
 model:add(nn.Dropout())
-model:add(cudnn.SpatialConvolution(32,24,3,3,1,1,1,1))
-model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
+model:add(cudnn.SpatialConvolution(48,32,3,3,1,1,1,1))
+model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
-model:add(cudnn.SpatialConvolution(24,16,1,1))
-model:add(cudnn.SpatialBatchNormalization(16))--,1e-3))
+model:add(cudnn.SpatialConvolution(32,32,1,1))
+model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
-model:add(cudnn.SpatialConvolution(16,#classes,1,1))
+model:add(cudnn.SpatialConvolution(32,#classes,1,1))
 model:add(cudnn.SpatialBatchNormalization(#classes))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialAveragePooling(8,8,1,1):ceil())
@@ -271,7 +271,10 @@ model:apply(function(l) l:reset() end)
 timer = torch.Timer()
 
 for e = 1, epochs do
-	print('start epoc ' .. e .. ':')
+    print('start epoc ' .. e .. ':')
+    local f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
+    f:write('Epoc ' .. e .. ':')
+	
     trainData, trainLabels = shuffle(trainData, trainLabels) --shuffle training data
     trainLoss[e], trainError[e] = forwardNet(trainData, trainLabels, true)
     testLoss[e], testError[e], confusion = forwardNet(testData, testLabels, false)
@@ -287,6 +290,17 @@ for e = 1, epochs do
         print('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e])
         print('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e])
    end
+	
+   if e > 1 then
+	if (testError[e] > testError[e-1]) then
+	    torch.save('ConvClassifierModel.t7', model)
+	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
+	    f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e])
+	    f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e])
+            f:close()
+	end
+    end
+	
 end
 
 plotError(trainError, testError, 'Classification Error')
