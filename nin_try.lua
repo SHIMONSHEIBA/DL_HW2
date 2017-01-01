@@ -160,7 +160,7 @@ model:add(nn.View(#classes))
 
 model:cuda()
 --criterion = nn.ClassNLLCriterion():cuda()
-criterionName = CrossEntropyCriterion
+--criterionName = CrossEntropyCriterion
 criterion = nn.CrossEntropyCriterion():cuda()
 
 
@@ -175,9 +175,8 @@ local f = assert(io.open('logFile.log', 'w'), 'Failed to open input file')
    --f:write(model)
    f:write('Number of parameters: ')
    f:write(w:nElement())
-   f:write('\nThe criterion is: ')
-   f:write(criterionName)
-   f:write('\noptim function: ')
+   f:write('\n The criterion is: CrossEntropyCriterion')
+   f:write('\n optim function: ')
    f:write('adam\n')
 
 function shuffle(data,ydata) --shuffle data function
