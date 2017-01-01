@@ -114,7 +114,7 @@ local model = nn.Sequential()
 local function Block(...)
   local arg = {...}
   model:add(cudnn.SpatialConvolution(...))
-  model:add(cudnn.SpatialBatchNormalization(arg[2],1e-3))
+  model:add(cudnn.SpatialBatchNormalization(arg[2]))--,1e-3))
   model:add(nn.ReLU(true))
   return model
 end
@@ -122,17 +122,17 @@ end
 Block(3,192,5,5,1,1,2,2)
 Block(192,160,1,1)
 Block(160,96,1,1)
-model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
+model:add(cudnn.SpatialMaxPooling(3,3,2,2))--:ceil())
 model:add(nn.Dropout())
 Block(96,192,5,5,1,1,2,2)
 Block(192,192,1,1)
 Block(192,192,1,1)
-model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
+model:add(cudnn.SpatialAveragePooling(3,3,2,2))--:ceil())
 model:add(nn.Dropout())
 Block(192,192,3,3,1,1,1,1)
 Block(192,192,1,1)
 Block(192,#classes,1,1)
-model:add(cudnn.SpatialAveragePooling(8,8,1,1):ceil())
+model:add(cudnn.SpatialAveragePooling(8,8,1,1))--:ceil())
 model:add(nn.View(#classes))
 
 --for k,v in pairs(model:findModules(('%s.SpatialConvolution'):format(backend_name))) do
