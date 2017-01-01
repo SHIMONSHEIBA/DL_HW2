@@ -161,7 +161,7 @@ model:add(nn.View(#classes))
 model:cuda()
 --criterion = nn.ClassNLLCriterion():cuda()
 criterionName = CrossEntropyCriterion
-criterion = nn.criterionName():cuda()
+criterion = nn.CrossEntropyCriterion():cuda()
 
 
 w, dE_dw = model:getParameters()
