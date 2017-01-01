@@ -181,6 +181,7 @@ local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
    f:write('adam\n')
 
 
+
 function shuffle(data,ydata) --shuffle data function
     local RandOrder = torch.randperm(data:size(1)):long()
     return data:index(1,RandOrder), ydata:index(1,RandOrder)
@@ -193,7 +194,8 @@ require 'optim'
 
 local batchSize = 128
 f:write('batchSize: ')
-f:write(batchSize)
+f:write(batchSize'\n')
+f:close()
 local optimState = {}
 
 function forwardNet(data,labels, train)
@@ -313,7 +315,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
---local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -342,8 +344,8 @@ local WritetestLoss = testLoss[e]
        WritetestLoss = testLoss[e]
        f:write('Training error: ' .. WritetrainError ..  ' Training Loss: ' .. WritetrainLoss .. '\n')
        f:write('Test error: ' .. WritetestError .. ' Test Loss: ' .. WritetestLoss ..'\n')
-    end
-    f:close()	
+    end	
+    f:close()
 end
 
 plotError(trainError, testError, 'Classification Error')
