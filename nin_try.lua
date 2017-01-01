@@ -311,6 +311,11 @@ for e = 1, epochs do
 	    f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e]'\n')
 	    f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e]'\n')
 	end
+    else
+       print('save the model')
+       torch.save('ConvClassifierModel.t7', model)
+       f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e]'\n')
+       f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e]'\n')
     end
 	
 end
