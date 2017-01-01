@@ -196,7 +196,7 @@ local batchSize = 128
 f:write('batchSize: ')
 f:write(batchSize)
 f:write('\n')
-f:close()
+--f:close()
 local optimState = {}
 
 function forwardNet(data,labels, train)
@@ -316,7 +316,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
+--local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -346,8 +346,9 @@ local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
        f:write('Training error: ' .. WritetrainError ..  ' Training Loss: ' .. WritetrainLoss .. '\n')
        f:write('Test error: ' .. WritetestError .. ' Test Loss: ' .. WritetestLoss ..'\n')
     end	
-    f:close()
 end
+
+f:close()
 
 plotError(trainError, testError, 'Classification Error')
 
