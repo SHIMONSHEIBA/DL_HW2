@@ -168,7 +168,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -179,6 +179,7 @@ local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
    --f:write(criterionName)
    f:write('\n optim function: ')
    f:write('adam\n')
+f:close()
 
 function shuffle(data,ydata) --shuffle data function
     local RandOrder = torch.randperm(data:size(1)):long()
@@ -305,14 +306,15 @@ for e = 1, epochs do
    if e == 1 then
       local bestError = testError[e]
    end
-	
+
+local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
    if e > 1 then
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
 	    torch.save('ConvClassifierModel.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
-	    f:write('Epoc ' .. e .. ':')
+	    f:write('Epoc ' .. e .. ': \n')
 	    trainError = trainError[e]
 	    trainLoss = trainLoss[e] 
 	    testError = testError[e]
@@ -323,7 +325,7 @@ for e = 1, epochs do
     else
        print('save the model')
        torch.save('ConvClassifierModel.t7', model)
-       f:write('Epoc ' .. e .. ':')
+       f:write('Epoc ' .. e .. ': \n')
        trainError = trainError[e]
        trainLoss = trainLoss[e] 
        testError = testError[e]
@@ -331,12 +333,10 @@ for e = 1, epochs do
        f:write('Training error: ' .. trainError ..  'Training Loss: ' .. trainLoss .. '\n')
        f:write('Test error: ' .. testError .. 'Test Loss: ' .. testLoss ..'\n')
     end
-	
+    f:close()	
 end
 
 plotError(trainError, testError, 'Classification Error')
-
-f:close()
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
