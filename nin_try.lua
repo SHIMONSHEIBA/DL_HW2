@@ -175,7 +175,7 @@ function forwardNet(data,labels, train)
         --set network into training mode
         model:training()
     else
-		print('evaluate')
+		--print('evaluate')
 		--io.read()
         model:evaluate() -- turn of drop-out
     end
@@ -253,7 +253,7 @@ model:apply(function(l) l:reset() end)
 timer = torch.Timer()
 
 for e = 1, epochs do
-	print('start epoc' .. e .. ':')
+	print('start epoc ' .. e .. ':')
     trainData, trainLabels = shuffle(trainData, trainLabels) --shuffle training data
     trainLoss[e], trainError[e] = forwardNet(trainData, trainLabels, true)
     testLoss[e], testError[e], confusion = forwardNet(testData, testLabels, false)
