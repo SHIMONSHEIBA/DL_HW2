@@ -56,6 +56,7 @@ do -- data augmentation module
 
   function BatchFlip:updateOutput(input)
     if self.train then
+			print("andrey")
       self.output:set(input:cuda())
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
@@ -175,6 +176,7 @@ function forwardNet(data,labels, train)
         --set network into training mode
         model:training()
     else
+		io.read()
         model:evaluate() -- turn of drop-out
     end
 	--print('check4')
