@@ -168,7 +168,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile3.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -316,7 +316,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile3.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFile1.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
