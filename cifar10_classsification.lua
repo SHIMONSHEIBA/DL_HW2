@@ -106,19 +106,20 @@ end
 --  ****************************************************************
 
 local model = nn.Sequential()
---model:add(nn.BatchFlip():float())
+model:add(nn.BatchFlip():float())
 --model:add(cudnn.SpatialConvolution(3, 32, 5, 5)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
-model:add(cudnn.SpatialConvolution(3, 64, 5, 5,1,1,2,2)) -- 3 input image channel, 32 output channels, 5x5 convolution kernel
+model:add(cudnn.SpatialConvolution(3, 64, 5, 5,1,1,2,2)) -- 3 input image channel, 64 output channels, 5x5 convolution kernel. 
+--owidth=floor((32+2*2-5)/1 +1)=32. same goes to ohight. output- 32*32*64
 model:add(cudnn.SpatialBatchNormalization(64))    --Batch normalization will provide quicker convergence
 model:add(nn.LeakyReLU(true))                          -- ReLU activation function
-model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
+model:add(cudnn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.=16*16*64
 --model:add(nn.SpatialMaxPooling(2,2,2,2))      -- A max-pooling operation that looks at 2x2 windows and finds the max.
 --model:add(cudnn.ReLU(true))                          -- ReLU activation function
-model:add(cudnn.SpatialConvolution(64, 32, 5, 5,1,1,2,2))
+model:add(cudnn.SpatialConvolution(64, 32, 5, 5,1,1,2,2))--=16*16*32
 model:add(cudnn.SpatialBatchNormalization(32))    --Batch normalization will provide quicker convergence
 model:add(nn.LeakyReLU(true))                          -- ReLU activation function
 --model:add(cudnn.SpatialConvolution(32, 64, 3, 3))
-model:add(cudnn.SpatialMaxPooling(2,2,2,2))
+model:add(cudnn.SpatialMaxPooling(2,2,2,2))--8*8*32
 model:add(nn.Dropout(0.2)) 
 --model:add(cudnn.SpatialConvolution(16, 16, 5, 5, 1, 1, 2, 2))
 --model:add(cudnn.SpatialMaxPooling(2,2,2,2))
@@ -126,10 +127,10 @@ model:add(nn.Dropout(0.2))
 --model:add(cudnn.SpatialBatchNormalization(16))
 --model:add(nn.LeakyReLU(true))
 --model:add(cudnn.SpatialConvolution(64, 32, 3, 3))
-model:add(cudnn.SpatialConvolution(32, #classes, 5, 5, 2, 2, 2, 2))
+model:add(cudnn.SpatialConvolution(32, #classes, 5, 5, 2, 2, 2, 2))--4*4*10
 model:add(cudnn.SpatialBatchNormalization(#classes))    --Batch normalization will provide quicker convergence
 model:add(nn.LeakyReLU(true))  
-model:add(cudnn.SpatialMaxPooling(2,2,2,2))
+model:add(cudnn.SpatialMaxPooling(2,2,4,4))
 model:add(nn.View(#classes))  -- reshapes from a 3D tensor of 32x4x4 into 1D tensor of 32*4*4
 --model:add(nn.Linear(16*4*4, 32))             -- fully connected layer (matrix multiplication between input and weights)
 --model:add(cudnn.ReLU(true))
