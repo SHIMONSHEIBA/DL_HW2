@@ -56,17 +56,18 @@ do -- data augmentation module
 
   function BatchFlip:updateOutput(input)
     if self.train then
+      self.output:set(input:cuda())
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
-       	if (flip_mask[i] % 6 == 0) then image.hflip(input[i]) end
-	if (flip_mask[i] % 6 == 1) then image.vflip(input[i]) end
+       	if (flip_mask[i] % 6 == 0) then image.hflip(output[i], input[i]) end
+	if (flip_mask[i] % 6 == 1) then image.vflip(output[i], input[i]) end
 	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],tl,32,32) end
 	if (flip_mask[i] % 6 == 3) then image.rotate(input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
     end
     end
-    self.output:set(input:cuda())
+    --self.output:set(input:cuda())
     return self.output
   end
 end
@@ -137,7 +138,7 @@ model:add(nn.View(#classes))  -- reshapes from a 3D tensor of 32x4x4 into 1D ten
 --model:add(nn.LeakyReLU(true))
 --model:add(nn.Dropout(0.4))                      --Dropout layer with p=0.2
 --model:add(nn.Linear(#classes, #classes))            -- 10 is the number of outputs of the network (in this case, 10 digits)
-model:add(nn.LogSoftMax())                     -- converts the output to a log-probability. Useful for classificati
+--model:add(nn.LogSoftMax())                     -- converts the output to a log-probability. Useful for classificati
 
 model:cuda()
 --criterion = nn.ClassNLLCriterion():cuda()
