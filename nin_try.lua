@@ -136,12 +136,12 @@ model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialConvolution(32,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.leakyReLU(true))
-model:add(nn.Dropout(0.5))
+model:add(nn.Dropout(0.2))
 model:add(cudnn.SpatialConvolution(64,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
-model:add(nn.Dropout(0.5))
+model:add(nn.Dropout(0.2))
 model:add(cudnn.SpatialConvolution(64,24,3,3,1,1,1,1))
 model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
 model:add(nn.leakyReLU(true))
@@ -193,12 +193,14 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 64
+local batchSize = 16
 f:write('batchSize: ')
 f:write(batchSize)
 f:write('\n')
 f:close()
-local optimState = {}
+local optimState = {
+	learningRate = 0.05
+}
 
 function forwardNet(data,labels, train)
     --another helpful function of optim is ConfusionMatrix
