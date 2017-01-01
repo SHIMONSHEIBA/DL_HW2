@@ -168,7 +168,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
