@@ -63,8 +63,9 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1, bs do
-       	if (flip_mask[i] % 2 == 0) then image.hflip(input[i],input[i]) end
+       	if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
 	--if (flip_mask[i] % 3 == 1) then self.output[i] = image.vflip(input[i]) end
+	if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
 	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],tl,32,32) end
 	--if (flip_mask[i] % 3 == 2) then self.output[i] = image.rotate(input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
@@ -121,35 +122,35 @@ local model = nn.Sequential()
 model:add(nn.BatchFlip():float())
 model:add(cudnn.SpatialConvolution(3,16,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(16))--,1e-3))
-model:add(nn.ReLU(true))
+model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialConvolution(16,24,1,1))
 model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
-model:add(nn.ReLU(true))
+model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialConvolution(24,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.ReLU(true))
-model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
+model:add(nn.leakyReLU(true))
+model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
 model:add(cudnn.SpatialConvolution(32,32,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.ReLU(true))
+model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialConvolution(32,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
-model:add(nn.ReLU(true))
-model:add(nn.Dropout())
+model:add(nn.leakyReLU(true))
+model:add(nn.Dropout(0.5))
 model:add(cudnn.SpatialConvolution(64,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
-model:add(nn.ReLU(true))
+model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
---model:add(nn.Dropout())
+model:add(nn.Dropout(0.5))
 model:add(cudnn.SpatialConvolution(64,24,3,3,1,1,1,1))
 model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
-model:add(nn.ReLU(true))
+model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialConvolution(24,24,1,1))
 model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
-model:add(nn.ReLU(true))
+model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialConvolution(24,#classes,1,1))
 model:add(cudnn.SpatialBatchNormalization(#classes))--,1e-3))
-model:add(nn.ReLU(true))
+model:add(nn.leakyReLU(true))
 model:add(cudnn.SpatialAveragePooling(8,8,1,1):ceil())
 model:add(nn.View(#classes))
 
@@ -168,7 +169,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -178,7 +179,7 @@ local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
    f:write('\n The criterion is: CrossEntropyCriterion')
    --f:write(criterionName)
    f:write('\n optim function: ')
-   f:write('adam\n')
+   f:write('sgd\n')
 
 
 
@@ -192,7 +193,7 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 128
+local batchSize = 64
 f:write('batchSize: ')
 f:write(batchSize)
 f:write('\n')
@@ -255,7 +256,7 @@ function forwardNet(data,labels, train)
             end
         
 	--print('check13')
-            optim.adam(feval, w, optimState)
+            optim.sgd(feval, w, optimState)
         end
     end
    -- print('check14')
@@ -316,7 +317,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile1.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFile2.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -325,7 +326,7 @@ local f = assert(io.open('logFile1.log', 'a+'), 'Failed to open input file')
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModel.t7', model)
+	    torch.save('ConvClassifierModel2.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
