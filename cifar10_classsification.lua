@@ -58,7 +58,8 @@ do -- data augmentation module
     if self.train then
 			--print("andrey")
       --self.output:set(input:cuda())
-			self.output:set(input)
+			self.output = input
+			--self.output:set(input)
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1,input:size(1) do
