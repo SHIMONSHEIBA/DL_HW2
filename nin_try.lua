@@ -285,7 +285,6 @@ timer = torch.Timer()
 
 for e = 1, epochs do
     print('start epoc ' .. e .. ':')
-    f:write('Epoc ' .. e .. ':')
 	
     trainData, trainLabels = shuffle(trainData, trainLabels) --shuffle training data
     trainLoss[e], trainError[e] = forwardNet(trainData, trainLabels, true)
@@ -302,18 +301,25 @@ for e = 1, epochs do
         print('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e])
         print('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e])
    end
+   
+   if e == 1 then
+      local bestError = testError[e]
+   end
 	
    if e > 1 then
-	if (testError[e] > testError[e-1]) then
+	if (testError[e] < bestError) then
+	    bestError = testError[e]
 	    print('save the model')
 	    torch.save('ConvClassifierModel.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
+	    f:write('Epoc ' .. e .. ':')
 	    f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e]'\n')
 	    f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e]'\n')
 	end
     else
        print('save the model')
        torch.save('ConvClassifierModel.t7', model)
+       f:write('Epoc ' .. e .. ':')
        f:write('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e]'\n')
        f:write('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e]'\n')
     end
