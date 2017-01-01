@@ -266,7 +266,12 @@ for e = 1, epochs do
         print('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e])
         print('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e])
         print(confusion)
-    end
+   else
+	 
+        print('Epoch ' .. e .. ':')
+        print('Training error: ' .. trainError[e], 'Training Loss: ' .. trainLoss[e])
+        print('Test error: ' .. testError[e], 'Test Loss: ' .. testLoss[e])
+   end
 end
 
 plotError(trainError, testError, 'Classification Error')
