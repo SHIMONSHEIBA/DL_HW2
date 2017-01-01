@@ -129,22 +129,22 @@ model:add(cudnn.SpatialConvolution(24,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
-model:add(nn.Dropout())
 model:add(cudnn.SpatialConvolution(32,32,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(32,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.ReLU(true))
+model:add(nn.Dropout())
 model:add(cudnn.SpatialConvolution(64,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
-model:add(nn.Dropout())
-model:add(cudnn.SpatialConvolution(64,32,3,3,1,1,1,1))
-model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
+--model:add(nn.Dropout())
+model:add(cudnn.SpatialConvolution(64,24,3,3,1,1,1,1))
+model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
 model:add(nn.ReLU(true))
-model:add(cudnn.SpatialConvolution(32,24,1,1))
+model:add(cudnn.SpatialConvolution(24,24,1,1))
 model:add(cudnn.SpatialBatchNormalization(24))--,1e-3))
 model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(24,#classes,1,1))
@@ -168,7 +168,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -179,7 +179,7 @@ local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
    --f:write(criterionName)
    f:write('\n optim function: ')
    f:write('adam\n')
-f:close()
+
 
 function shuffle(data,ydata) --shuffle data function
     local RandOrder = torch.randperm(data:size(1)):long()
@@ -191,7 +191,9 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 8
+local batchSize = 128
+f:write('batchSize: ')
+f:write(batchSize)
 local optimState = {}
 
 function forwardNet(data,labels, train)
@@ -273,7 +275,7 @@ end
 
 ---------------------------------------------------------------------
 
-epochs = 200
+epochs = 1000
 trainLoss = torch.Tensor(epochs)
 testLoss = torch.Tensor(epochs)
 trainError = torch.Tensor(epochs)
@@ -311,8 +313,12 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
+--local f = assert(io.open('logFile2.log', 'w'), 'Failed to open input file')
    if e > 1 then
+	print('test Error: ')
+	print(testError[e])
+	print('\nbest Error: ')
+        print(bestError)
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
