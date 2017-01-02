@@ -123,26 +123,27 @@ model:add(nn.BatchFlip():float())
 model:add(cudnn.SpatialConvolution(3,32,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
---model:add(cudnn.SpatialConvolution(32,32,1,1))---doesnt do anything to the dimensions
---model:add(cudnn.SpatialBatchNormalization())--,1e-3))
---model:add(nn.ReLU(true))
---model:add(cudnn.SpatialConvolution(32,32,1,1))---doesnt do anything to the dimensions
---model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
---model:add(nn.ReLU(true))
-model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
-model:add(nn.Dropout())
-model:add(cudnn.SpatialConvolution(32,32,5,5,1,1,2,2))
+model:add(cudnn.SpatialConvolution(32,32,1,1))---doesnt do anything to the dimensions
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
 --model:add(cudnn.SpatialConvolution(32,32,1,1))---doesnt do anything to the dimensions
 --model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 --model:add(nn.ReLU(true))
+model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
 --model:add(nn.Dropout())
+model:add(cudnn.SpatialConvolution(32,32,5,5,1,1,2,2))
+model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
+model:add(nn.ReLU(true))
+model:add(cudnn.SpatialConvolution(32,32,1,1))---doesnt do anything to the dimensions
+model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
+model:add(nn.ReLU(true))
+model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
+model:add(nn.Dropout())
 --model:add(cudnn.SpatialConvolution(32,32,1,1))---doesnt do anything to the dimensions
 --model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 --model:add(nn.ReLU(true))
-model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
-model:add(nn.Dropout())
+--model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
+--model:add(nn.Dropout())
 model:add(cudnn.SpatialConvolution(32,64,3,3,1,1,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.ReLU(true))
@@ -180,7 +181,7 @@ local f = assert(io.open('logFile5.log', 'w'), 'Failed to open input file')
    f:write('\n The criterion is: ClassNLLCriterion')
    --f:write(criterionName)
    f:write('\n optim function: ')
-   f:write('adagrad\n')
+   f:write('sgd\n')
 
 
 
@@ -200,7 +201,7 @@ f:write(batchSize)
 f:write('\n')
 f:close()
 local optimState = {
-	--learningRate = 0.1
+	learningRate = 0.5
 }
 
 function forwardNet(data,labels, train)
@@ -259,7 +260,7 @@ function forwardNet(data,labels, train)
             end
         
 	--print('check13')
-            optim.adagrad(feval, w, optimState)
+            optim.sgd(feval, w, optimState)
         end
     end
    -- print('check14')
