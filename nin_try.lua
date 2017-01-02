@@ -120,10 +120,10 @@ local model = nn.Sequential()
   --return model
 --end
 model:add(nn.BatchFlip():float())
-model:add(cudnn.SpatialConvolution(3,32,5,5,1,1,2,2))
-model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
+model:add(cudnn.SpatialConvolution(3,64,5,5,1,1,2,2))
+model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
 model:add(nn.Tanh())
-model:add(cudnn.SpatialConvolution(32,32,1,1))
+model:add(cudnn.SpatialConvolution(64,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.Tanh())
 model:add(cudnn.SpatialConvolution(32,32,1,1))
