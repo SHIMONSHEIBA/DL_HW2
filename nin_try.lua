@@ -201,8 +201,8 @@ f:write(batchSize)
 f:write('\n')
 f:close()
 local optimState = {
- learningRate = 1
- momentum =  0.9 
+ learningRate = 1,
+ momentum =  0.9,
  weightDecay =  0.0005
 }
 
