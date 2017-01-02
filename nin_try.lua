@@ -299,7 +299,7 @@ timer = torch.Timer()
 for e = 1, epochs do
     print('start epoc ' .. e .. ':')
 	
-    if epoch % 25 == 0 then optimState.learningRate = optimState.learningRate/2 end
+    if e % 25 == 0 then optimState.learningRate = optimState.learningRate/2 end
 	
     trainData, trainLabels = shuffle(trainData, trainLabels) --shuffle training data
     trainLoss[e], trainError[e] = forwardNet(trainData, trainLabels, true)
