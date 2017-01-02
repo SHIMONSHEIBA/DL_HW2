@@ -162,23 +162,23 @@ model:add(nn.View(#classes))
 --end
 
 model:cuda()
-criterion = nn.ClassNLLCriterion():cuda()
+--criterion = nn.ClassNLLCriterion():cuda()
 --criterionName = CrossEntropyCriterion
---criterion = nn.CrossEntropyCriterion():cuda()
+criterion = nn.CrossEntropyCriterion():cuda()
 
 
 w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile5.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile6.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
    --f:write(model)
    f:write('Number of parameters: ')
    f:write(w:nElement())
-   f:write('\n The criterion is: ClassNLLCriterion')
+   f:write('\n The criterion is: CrossEntropyCriterion')
    --f:write(criterionName)
    f:write('\n optim function: ')
    f:write('sgd\n')
@@ -195,13 +195,13 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 32
+local batchSize = 16
 f:write('batchSize: ')
 f:write(batchSize)
 f:write('\n')
 f:close()
 local optimState = {
-	learningRate = 0.5
+	learningRate = 0.05
 }
 
 function forwardNet(data,labels, train)
@@ -321,7 +321,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile5.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFile6.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -330,7 +330,7 @@ local f = assert(io.open('logFile5.log', 'a+'), 'Failed to open input file')
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModel5.t7', model)
+	    torch.save('ConvClassifierModel6.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -342,7 +342,7 @@ local f = assert(io.open('logFile5.log', 'a+'), 'Failed to open input file')
 	end
     else
        print('save the model')
-       torch.save('ConvClassifierModel5.t7', model)
+       torch.save('ConvClassifierModel6.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
