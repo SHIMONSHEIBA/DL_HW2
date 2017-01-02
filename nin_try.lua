@@ -327,12 +327,10 @@ local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
 local f = assert(io.open('logFile8_2.log', 'a+'), 'Failed to open input file')
    if e > 1 then
-	if e % 100 ==0 then
 	print('test Error: ')
 	print(testError[e])
 	print('\nbest Error: ')
         print(bestError)
-	end
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
