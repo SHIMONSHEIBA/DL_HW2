@@ -130,19 +130,19 @@ model:add(cudnn.SpatialConvolution(32,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.Tanh())
 model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
-model:add(nn.Dropout(0.5))
+model:add(nn.Dropout(0.2))
 model:add(cudnn.SpatialConvolution(32,32,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.Tanh())
 model:add(cudnn.SpatialConvolution(32,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.Tanh())
-model:add(nn.Dropout(0.5))
+model:add(nn.Dropout(0.2))
 model:add(cudnn.SpatialConvolution(32,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.Tanh())
 model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
-model:add(nn.Dropout(0.5))
+model:add(nn.Dropout(0.2))
 model:add(cudnn.SpatialConvolution(32,32,3,3,1,1,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.Tanh())
@@ -170,7 +170,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile1.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile4.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -194,13 +194,13 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 64
+local batchSize = 16
 f:write('batchSize: ')
 f:write(batchSize)
 f:write('\n')
 f:close()
 local optimState = {
-	learningRate = 0.5
+	learningRate = 0.1
 }
 
 function forwardNet(data,labels, train)
@@ -320,7 +320,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile1.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFile4.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -329,7 +329,7 @@ local f = assert(io.open('logFile1.log', 'a+'), 'Failed to open input file')
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModel1.t7', model)
+	    torch.save('ConvClassifierModel4.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -341,7 +341,7 @@ local f = assert(io.open('logFile1.log', 'a+'), 'Failed to open input file')
 	end
     else
        print('save the model')
-       torch.save('ConvClassifierModel1.t7', model)
+       torch.save('ConvClassifierModel4.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
