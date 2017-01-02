@@ -119,7 +119,7 @@ local model = nn.Sequential()
   --model:add(nn.ReLU(true))
   --return model
 --end
-model:add(nn.BatchFlip():float())
+--model:add(nn.BatchFlip():float())
 model:add(cudnn.SpatialConvolution(3,32,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
 model:add(nn.ReLU(true))
@@ -195,13 +195,15 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 16
+local batchSize = 64
 f:write('batchSize: ')
 f:write(batchSize)
 f:write('\n')
 f:close()
 local optimState = {
-	learningRate = 0.05
+ learningRate = 1
+ momentum =  0.9 
+ weightDecay =  0.0005
 }
 
 function forwardNet(data,labels, train)
@@ -226,9 +228,9 @@ function forwardNet(data,labels, train)
 	--print('check5')
         numBatches = numBatches + 1
 	--print('check6')
-        local x = data:narrow(1, i, batchSize)--:cuda()
+        local x = data:narrow(1, i, batchSize):cuda()
 	--print('check7')
-        local yt = labels:narrow(1, i, batchSize)--:cuda()
+        local yt = labels:narrow(1, i, batchSize):cuda()
 	--print('check8')
         local y = model:forward(x)
 	--print('check9')
@@ -296,6 +298,8 @@ timer = torch.Timer()
 
 for e = 1, epochs do
     print('start epoc ' .. e .. ':')
+	
+    if epoch % 25 == 0 then optimState.learningRate = optimState.learningRate/2 end
 	
     trainData, trainLabels = shuffle(trainData, trainLabels) --shuffle training data
     trainLoss[e], trainError[e] = forwardNet(trainData, trainLabels, true)
