@@ -122,36 +122,36 @@ local model = nn.Sequential()
 model:add(nn.BatchFlip():float())
 model:add(cudnn.SpatialConvolution(3,32,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(32,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(32,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialMaxPooling(3,3,2,2):ceil())
-model:add(nn.Dropout(0.2))
+model:add(nn.Dropout())
 model:add(cudnn.SpatialConvolution(32,32,5,5,1,1,2,2))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(32,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.Tanh())
-model:add(nn.Dropout(0.2))
+model:add(nn.ReLU(true))
+model:add(nn.Dropout())
 model:add(cudnn.SpatialConvolution(32,32,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialAveragePooling(3,3,2,2):ceil())
-model:add(nn.Dropout(0.2))
+--model:add(nn.Dropout())
 model:add(cudnn.SpatialConvolution(32,32,3,3,1,1,1,1))
 model:add(cudnn.SpatialBatchNormalization(32))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(32,64,1,1))
 model:add(cudnn.SpatialBatchNormalization(64))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialConvolution(64,#classes,1,1))
 model:add(cudnn.SpatialBatchNormalization(#classes))--,1e-3))
-model:add(nn.Tanh())
+model:add(nn.ReLU(true))
 model:add(cudnn.SpatialAveragePooling(8,8,1,1):ceil())
 model:add(nn.View(#classes))
 
@@ -161,26 +161,26 @@ model:add(nn.View(#classes))
 --end
 
 model:cuda()
---criterion = nn.ClassNLLCriterion():cuda()
+criterion = nn.ClassNLLCriterion():cuda()
 --criterionName = CrossEntropyCriterion
-criterion = nn.CrossEntropyCriterion():cuda()
+--criterion = nn.CrossEntropyCriterion():cuda()
 
 
 w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile4.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFile5.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
    --f:write(model)
    f:write('Number of parameters: ')
    f:write(w:nElement())
-   f:write('\n The criterion is: CrossEntropyCriterion')
+   f:write('\n The criterion is: ClassNLLCriterion')
    --f:write(criterionName)
    f:write('\n optim function: ')
-   f:write('sgd\n')
+   f:write('adagrad\n')
 
 
 
@@ -194,13 +194,13 @@ end
 --  ****************************************************************
 require 'optim'
 
-local batchSize = 16
+local batchSize = 32
 f:write('batchSize: ')
 f:write(batchSize)
 f:write('\n')
 f:close()
 local optimState = {
-	learningRate = 0.1
+	--learningRate = 0.1
 }
 
 function forwardNet(data,labels, train)
@@ -259,7 +259,7 @@ function forwardNet(data,labels, train)
             end
         
 	--print('check13')
-            optim.sgd(feval, w, optimState)
+            optim.adagrad(feval, w, optimState)
         end
     end
    -- print('check14')
@@ -320,7 +320,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile4.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFile5.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -329,7 +329,7 @@ local f = assert(io.open('logFile4.log', 'a+'), 'Failed to open input file')
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModel4.t7', model)
+	    torch.save('ConvClassifierModel5.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -341,7 +341,7 @@ local f = assert(io.open('logFile4.log', 'a+'), 'Failed to open input file')
 	end
     else
        print('save the model')
-       torch.save('ConvClassifierModel4.t7', model)
+       torch.save('ConvClassifierModel5.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
