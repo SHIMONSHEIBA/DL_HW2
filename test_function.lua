@@ -5,7 +5,7 @@ require 'nn'
 require 'cudnn'
 require 'image'
 
-model = torch.load('ConvClassifierModel8_2.t7')
+model = torch.load('ConvClassifierModel8_2.t7'):cuda()
 
 local trainset = torch.load('cifar.torch/cifar10-train.t7')
 local testset = torch.load('cifar.torch/cifar10-test.t7')
