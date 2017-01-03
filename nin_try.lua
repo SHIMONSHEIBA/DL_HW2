@@ -171,7 +171,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFileH&Vflip.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFileHVflipsgd.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -325,7 +325,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFileH&Vflip.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFileHVflipsgd.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -334,7 +334,7 @@ local f = assert(io.open('logFileH&Vflip.log', 'a+'), 'Failed to open input file
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModelH&Vflip.t7', model)
+	    torch.save('ConvClassifierModelHVflipsgd.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -346,7 +346,7 @@ local f = assert(io.open('logFileH&Vflip.log', 'a+'), 'Failed to open input file
 	end
     else
        print('save the model')
-       torch.save('ConvClassifierModelH&Vflip.t7', model)
+       torch.save('ConvClassifierModelHVflipsgd.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
@@ -364,13 +364,13 @@ plotError(trainError, testError, 'Classification Error')
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
-gnuplot.pngfigure('lossH&Vflip&sgd.png')
+gnuplot.pngfigure('lossHVflipsgd.png')
 gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Loss')
 gnuplot.plotflush()
 
-gnuplot.pngfigure('errorH&Vflip&sgd.png')
+gnuplot.pngfigure('errorHVflipsgd.png')
 gnuplot.plot({'trainError',trainError},{'testError',testError})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Error')
