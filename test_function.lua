@@ -3,6 +3,7 @@ require 'optim'
 require 'torch'
 require 'nn'
 require 'cudnn'
+require 'image'
 
 model = torch.load('ConvClassifierModel8_2.t7')
 
