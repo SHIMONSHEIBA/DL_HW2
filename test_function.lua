@@ -23,14 +23,10 @@ print(#redChannel)
 
 local mean = {}  -- store the mean, to normalize the test set in the future
 local stdv  = {} -- store the standard-deviation for the future
+
 for i=1,3 do -- over each image channel
     mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
-    print('Channel ' .. i .. ', Mean: ' .. mean[i])
-    trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
-    
     stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
-    print('Channel ' .. i .. ', Standard Deviation: ' .. stdv[i])
-    trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 end
 
 for i=1,3 do -- over each image channel
