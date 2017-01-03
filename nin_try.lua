@@ -64,7 +64,7 @@ do -- data augmentation module
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1, bs do
        	if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
-	--if (flip_mask[i] % 3 == 1) then self.output[i] = image.vflip(input[i]) end
+	if (flip_mask[i] % 3 == 1) then self.output[i] = image.vflip(input[i]) end
 	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
 	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],tl,32,32) end
 	--if (flip_mask[i] % 3 == 2) then self.output[i] = image.rotate(input[i],1.57079633) end
@@ -171,7 +171,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFile8_2.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFileH&Vflip.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -325,7 +325,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFile8_2.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFileH&Vflip', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -334,7 +334,7 @@ local f = assert(io.open('logFile8_2.log', 'a+'), 'Failed to open input file')
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModel8_2.t7', model)
+	    torch.save('ConvClassifierModelH&Vflip.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -346,7 +346,7 @@ local f = assert(io.open('logFile8_2.log', 'a+'), 'Failed to open input file')
 	end
     else
        print('save the model')
-       torch.save('ConvClassifierModel8_2.t7', model)
+       torch.save('ConvClassifierModelH&Vflip.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
@@ -364,13 +364,13 @@ plotError(trainError, testError, 'Classification Error')
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
-gnuplot.pngfigure('loss.png')
+gnuplot.pngfigure('lossH&Vflip&sgd.png')
 gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Loss')
 gnuplot.plotflush()
 
-gnuplot.pngfigure('error.png')
+gnuplot.pngfigure('errorH&Vflip&sgd.png')
 gnuplot.plot({'trainError',trainError},{'testError',testError})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Error')
