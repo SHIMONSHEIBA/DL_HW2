@@ -1,11 +1,10 @@
 require 'cunn'
 require 'optim'
 require 'torch'
-require 'nn'
 require 'cudnn'
 require 'image'
 
-model = torch.load('ConvClassifierModel8_2.t7'):cuda()
+model = torch.load('ConvClassifierModel8_2.t7')
 
 local trainset = torch.load('cifar.torch/cifar10-train.t7')
 local testset = torch.load('cifar.torch/cifar10-test.t7')
@@ -33,6 +32,8 @@ for i=1,3 do -- over each image channel
     testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
     testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 end
+
+require 'nn'
 
 do -- data augmentation module
   local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
