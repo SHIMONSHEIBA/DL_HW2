@@ -37,13 +37,21 @@ for i=1,3 do -- over each image channel
     testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 end
 
-function BatchFlip:updateOutput(input)
+do -- data augmentation module
+  local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
+
+  function BatchFlip:__init()
+    parent.__init(self)
+    self.train = true
+  end
+
+  function BatchFlip:updateOutput(input)
     if self.train then
       local bs = input:size(1)
-      local flip_mask = torch.randperm(bs)--:le(bs/2)
+      local flip_mask = torch.randperm(bs)
       for i=1, bs do
        	if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
-      end
+    end
     end
     self.output:set(input:cuda())
     return self.output
