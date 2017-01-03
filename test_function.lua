@@ -1,10 +1,7 @@
 require 'optim'
-require 'opt'
-if opt.gpu > 0 then
-  require 'cunn'
-  require 'cudnn'
-  require 'nn'
-end
+require 'cunn'
+require 'cudnn'
+require 'nn'
 require 'torch'
 require 'image'
 
