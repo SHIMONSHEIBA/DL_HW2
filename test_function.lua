@@ -37,6 +37,19 @@ for i=1,3 do -- over each image channel
     testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 end
 
+function BatchFlip:updateOutput(input)
+    if self.train then
+      local bs = input:size(1)
+      local flip_mask = torch.randperm(bs)--:le(bs/2)
+      for i=1, bs do
+       	if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
+      end
+    end
+    self.output:set(input:cuda())
+    return self.output
+  end
+end
+
 function TestModel()
 	
 	local confusion = optim.ConfusionMatrix(classes)
