@@ -64,7 +64,7 @@ do -- data augmentation module
       local flip_mask = torch.randperm(bs)--:le(bs/2)
       for i=1, bs do
        	if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
-	if (flip_mask[i] % 3 == 1) then self.output[i] = image.vflip(input[i]) end
+	if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
 	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
 	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],tl,32,32) end
 	--if (flip_mask[i] % 3 == 2) then self.output[i] = image.rotate(input[i],1.57079633) end
