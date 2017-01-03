@@ -17,22 +17,6 @@ trainLabels = trainset.label:float():add(1)
 testData = testset.data:float()
 testLabels = testset.label:float():add(1)
 
---normalizing our data
-local redChannel = trainData[{ {}, {1}, {}, {}  }] -- this picks {all images, 1st channel, all vertical pixels, all horizontal pixels}
-
-local mean = {}  -- store the mean, to normalize the test set in the future
-local stdv  = {} -- store the standard-deviation for the future
-
-for i=1,3 do -- over each image channel
-    mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
-    stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
-end
-
-for i=1,3 do -- over each image channel
-    testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
-    testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
-end
-
 do -- data augmentation module
   local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
 
@@ -52,6 +36,22 @@ do -- data augmentation module
     self.output:set(input:cuda())
     return self.output
   end
+end
+
+--normalizing our data
+local redChannel = trainData[{ {}, {1}, {}, {}  }] -- this picks {all images, 1st channel, all vertical pixels, all horizontal pixels}
+
+local mean = {}  -- store the mean, to normalize the test set in the future
+local stdv  = {} -- store the standard-deviation for the future
+
+for i=1,3 do -- over each image channel
+    mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
+    stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
+end
+
+for i=1,3 do -- over each image channel
+    testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
+    testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 end
 
 function TestModel()
