@@ -1,9 +1,13 @@
-require 'cunn'
 require 'optim'
+require 'opt'
+if opt.gpu > 0 then
+  require 'cunn'
+  require 'cudnn'
+  require 'nn'
+end
 require 'torch'
-require 'cudnn'
 require 'image'
-require 'nn'
+
 
 model = torch.load('ConvClassifierModel8_2.t7')
 
