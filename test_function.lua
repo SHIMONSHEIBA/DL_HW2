@@ -74,6 +74,7 @@ function TestModel()
         numBatches = numBatches + 1
         local x = testData:narrow(1, i, batchSize)
         local yt = testLabels:narrow(1, i, batchSize)
+	print('start model')
         local y = model:forward(x)
         local err = criterion:forward(y, yt)
         lossAcc = lossAcc + err
