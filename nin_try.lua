@@ -228,14 +228,14 @@ local WritetestLoss = testLoss[e]
 local f = assert(io.open('logFileBestModel.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	--print('test Error: ')
-	print(testError[e])
+	--print(testError[e])
 	--print('\nbest Error: ')
-        print(bestError)
+        --print(bestError)
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('Better error : save the model')
 	    torch.save('ConvClassifierModeBestModel.t7', model)
-	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
+
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
 	    WritetrainLoss = trainLoss[e] 
