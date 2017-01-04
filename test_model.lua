@@ -2,7 +2,7 @@
 Due to interest of time, please prepared the data before-hand into a 4D torch
 ByteTensor of size 50000x3x32x32 (training) and 10000x3x32x32 (testing) 
 ]]
-
+require 'optim'
 require 'torch'
 require 'image'
 require 'nn'
