@@ -143,7 +143,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFileNoAugAdam.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFileHflipAdam.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -297,7 +297,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFileNoAugAdam.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFileHflipAdam.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -306,7 +306,7 @@ local f = assert(io.open('logFileNoAugAdam.log', 'a+'), 'Failed to open input fi
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModelNoAugAdam.t7', model)
+	    torch.save('ConvClassifierModelHflipAdam.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -318,7 +318,7 @@ local f = assert(io.open('logFileNoAugAdam.log', 'a+'), 'Failed to open input fi
 	end
     else
        print('save the model')
-       torch.save('ConvClassifierModelNoAugAdam.t7', model)
+       torch.save('ConvClassifierModelHflipAdam.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
@@ -336,13 +336,13 @@ plotError(trainError, testError, 'Classification Error')
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
-gnuplot.pngfigure('lossNoAugAdam.png')
+gnuplot.pngfigure('lossHflipAdam.png')
 gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Loss')
 gnuplot.plotflush()
 
-gnuplot.pngfigure('errorNoAugAdam.png')
+gnuplot.pngfigure('errorHflipAdam.png')
 gnuplot.plot({'trainError',trainError},{'testError',testError})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Error')
