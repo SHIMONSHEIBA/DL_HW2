@@ -1,4 +1,4 @@
-require 'optim'
+--require 'optim'
 require 'cunn'
 require 'cudnn'
 require 'nn'
