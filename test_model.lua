@@ -80,3 +80,37 @@ for i=1,3 do -- over each image channel
 end
 
 
+
+
+function TestModel()
+	
+	local confusion = optim.ConfusionMatrix(classes)
+	local lossAcc = 0
+	local numBatches = 0
+	local batchSize = 32
+	
+	criterion = nn.CrossEntropyCriterion():cuda()
+	
+	model:evaluate()
+	
+    for i = 1, testData:size(1) - batchSize, batchSize do
+        numBatches = numBatches + 1
+        local x = testData:narrow(1, i, batchSize)
+        local yt = testLabels:narrow(1, i, batchSize)
+	print('start model')
+        local y = model:forward(x)
+        local err = criterion:forward(y, yt)
+        lossAcc = lossAcc + err
+        confusion:batchAdd(y,yt)
+    end
+    
+    confusion:updateValids()
+    local avgError = 1 - confusion.totalValid
+    return avgError
+end
+
+
+testError = TestModel()
+print('The test error is: ' .. testError)
+print('The accuracy of the model is: ' .. (1-testError)*100 .. '%')
+
