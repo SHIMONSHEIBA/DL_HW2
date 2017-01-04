@@ -55,3 +55,28 @@ model = torch.load('ConvClassifierModel8_2.t7')
 
 trainset = torch.load('cifar.torch/cifar10-train.t7')
 testset = torch.load('cifar.torch/cifar10-test.t7')
+
+
+local redChannel = trainData[{ {}, {1}, {}, {}  }] -- this picks {all images, 1st channel, all vertical pixels, all horizontal pixels}
+print(#redChannel)
+
+local mean = {}  -- store the mean, to normalize the test set in the future
+local stdv  = {} -- store the standard-deviation for the future
+for i=1,3 do -- over each image channel
+    mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
+    print('Channel ' .. i .. ', Mean: ' .. mean[i])
+    trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
+    
+    stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
+    print('Channel ' .. i .. ', Standard Deviation: ' .. stdv[i])
+    trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
+end
+
+-- Normalize test set using same values
+
+for i=1,3 do -- over each image channel
+    testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
+    testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
+end
+
+
