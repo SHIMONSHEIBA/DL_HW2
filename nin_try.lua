@@ -35,10 +35,10 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)
       for i=1, bs do
-       	if (flip_mask[i] % 4 == 0) then image.hflip(input[i],input[i]) end
-	if (flip_mask[i] % 4 == 1) then image.vflip(input[i],input[i]) end
+       	--if (flip_mask[i] % 4 == 0) then image.hflip(input[i],input[i]) end
+	if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
 	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
-	if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],input[i],tl,32,32) end
+	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],input[i],tl,32,32) end
 	--if (flip_mask[i] % 4 == 2) then image.rotate(input[i],input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
     end
@@ -143,7 +143,7 @@ w, dE_dw = model:getParameters()
 print('Number of parameters:', w:nElement())
 print(model)
 
-local f = assert(io.open('logFileHVRotateSGD.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFileVSGD.log', 'w'), 'Failed to open input file')
  --print('open the file')
    --f:write('The model is: ')
 --print('start print to the log')
@@ -297,7 +297,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFileHVRotateSGD.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFileVSGD.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	print('test Error: ')
 	print(testError[e])
@@ -306,7 +306,7 @@ local f = assert(io.open('logFileHVRotateSGD.log', 'a+'), 'Failed to open input 
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('save the model')
-	    torch.save('ConvClassifierModelHVRotateSGD.t7', model)
+	    torch.save('ConvClassifierModelVSGD.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -318,7 +318,7 @@ local f = assert(io.open('logFileHVRotateSGD.log', 'a+'), 'Failed to open input 
 	end
     else
        print('save the model')
-       torch.save('ConvClassifierHVRotateSGD.t7', model)
+       torch.save('ConvClassifierVSGD.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
@@ -336,13 +336,13 @@ plotError(trainError, testError, 'Classification Error')
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
-gnuplot.pngfigure('lossHVRotateSGD.png')
+gnuplot.pngfigure('lossVSGD.png')
 gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Loss')
 gnuplot.plotflush()
 
-gnuplot.pngfigure('errorHVRotateSGD.png')
+gnuplot.pngfigure('errorVSGDpng')
 gnuplot.plot({'trainError',trainError},{'testError',testError})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Error')
