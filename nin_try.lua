@@ -118,7 +118,7 @@ print('Number of parameters:', w:nElement())
 print(model)
 
 --Create a log file to save the results
-local f = assert(io.open('logFileVSGD.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFileBestModel.log', 'w'), 'Failed to open input file')
    f:write('Number of parameters: ')
    f:write(w:nElement())
    f:write('\n The criterion is: CrossEntropyCriterion')
@@ -225,16 +225,16 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFileVSGD.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFileBestModel.log', 'a+'), 'Failed to open input file')
    if e > 1 then
-	print('test Error: ')
+	--print('test Error: ')
 	print(testError[e])
-	print('\nbest Error: ')
+	--print('\nbest Error: ')
         print(bestError)
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
-	    print('save the model')
-	    torch.save('ConvClassifierModelVSGD.t7', model)
+	    --print('save the model')
+	    torch.save('ConvClassifierModeBestModel.t7', model)
 	        --f = assert(io.open('logFile.log', 'r'), 'Failed to open input file')
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -245,8 +245,8 @@ local f = assert(io.open('logFileVSGD.log', 'a+'), 'Failed to open input file')
 	    f:write('Test error: ' .. WritetestError .. ' Test Loss: ' .. WritetestLoss ..'\n')
 	end
     else
-       print('save the model')
-       torch.save('ConvClassifierVSGD.t7', model)
+       --print('save the model')
+       torch.save('ConvClassifierBestModel.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
@@ -276,13 +276,13 @@ plotError(trainError, testError, 'Classification Error')
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
-gnuplot.pngfigure('lossVSGD.png')
+gnuplot.pngfigure('lossBestModel.png')
 gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Loss')
 gnuplot.plotflush()
 
-gnuplot.pngfigure('errorVSGDpng')
+gnuplot.pngfigure('errorBestModel.png')
 gnuplot.plot({'trainError',trainError},{'testError',testError})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Error')
