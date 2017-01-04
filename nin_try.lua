@@ -38,8 +38,8 @@ do -- data augmentation module
        	if (flip_mask[i] % 4 == 0) then image.hflip(input[i],input[i]) end
 	if (flip_mask[i] % 4 == 1) then image.vflip(input[i],input[i]) end
 	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
-	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],tl,32,32) end
-	if (flip_mask[i] % 4 == 2) then image.rotate(input[i],input[i],1.57079633) end
+	if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],input[i],tl,32,32) end
+	--if (flip_mask[i] % 4 == 2) then image.rotate(input[i],input[i],1.57079633) end
 	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
     end
     end
