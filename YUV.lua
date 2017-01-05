@@ -65,7 +65,7 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)
       for i=1, bs do		
-       if (flip_mask[i] % 2 == 0) then image.hflip(input[i],input[i]) end
+       if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
     	end
     	end
     	self.output:set(input:cuda())
@@ -125,7 +125,7 @@ print('Number of parameters:', w:nElement())
 print(model)
 
 --Create a log file to save the results
-local f = assert(io.open('logFileYUV.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFileYUV2.log', 'w'), 'Failed to open input file')
    f:write('Number of parameters: ')
    f:write(w:nElement())
    f:write('\n The criterion is: CrossEntropyCriterion')
@@ -232,7 +232,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFileYUV.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFileYUV2.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	--print('test Error: ')
 	--print(testError[e])
@@ -241,7 +241,7 @@ local f = assert(io.open('logFileYUV.log', 'a+'), 'Failed to open input file')
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('Better error : save the model')
-	    torch.save('ConvClassifierYUV.t7', model)
+	    torch.save('ConvClassifierYUV2.t7', model)
 
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -253,7 +253,7 @@ local f = assert(io.open('logFileYUV.log', 'a+'), 'Failed to open input file')
 	end
     else
        print('Better error : save the model')
-       torch.save('ConvClassifierYUV.t7', model)
+       torch.save('ConvClassifierYUV2.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
@@ -272,7 +272,7 @@ end
 function plotError(trainError, testError, title)
 	require 'gnuplot'
 	local range = torch.range(1, trainError:size(1))
-	gnuplot.pngfigure('testVsTrainErrorYUV.png')
+	gnuplot.pngfigure('testVsTrainErrorYUV2.png')
 	gnuplot.plot({'trainError',trainError},{'testError',testError})
 	gnuplot.xlabel('epochs')
 	gnuplot.ylabel('Error')
@@ -283,13 +283,13 @@ plotError(trainError, testError, 'Classification Error')
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
-gnuplot.pngfigure('lossBestModelYUV.png')
+gnuplot.pngfigure('lossBestModelYUV2.png')
 gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Loss')
 gnuplot.plotflush()
 
-gnuplot.pngfigure('errorBestModelYUV.png')
+gnuplot.pngfigure('errorBestModelYUV2.png')
 gnuplot.plot({'trainError',trainError},{'testError',testError})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Error')
