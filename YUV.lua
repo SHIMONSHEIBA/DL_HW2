@@ -27,7 +27,7 @@ print(trainData:size())
 --    trainData[{ {}, {i}, {}, {}  }] = trainData[{ {}, {i}, {}, {}  }]/255
 --end
 print('train is between 0 to 1')
-print(trainData[{ {1}, {1}, {1}, {1}  }])
+print(trainData[{ {1}, {1}, {1}, {1}  }]:size())
 --for i=1,3 do -- over each image channel
 --    testData[{ {}, {i}, {}, {}  }] = testData[{ {}, {i}, {}, {}  }]/255
 --end
