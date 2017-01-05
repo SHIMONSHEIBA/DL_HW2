@@ -65,7 +65,7 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)
       for i=1, bs do		
-       if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
+       if (flip_mask[i] % 2 == 0) then image.hflip(input[i],input[i]) end
     	end
     	end
     	self.output:set(input:cuda())
