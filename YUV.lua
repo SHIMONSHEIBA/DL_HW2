@@ -21,6 +21,16 @@ local testLabels = testset.label:float():add(1)
 
 print(trainData:size())
 
+------------------------------------normlize to 0-255----------------------------------------------------------------------------------
+
+for i=1,3 do -- over each image channel
+    trainData[{ {}, {i}, {}, {}  }] = ((trainData[{ {}, {i}, {}, {}  }])/255)
+end
+
+for i=1,3 do -- over each image channel
+    testData[{ {}, {i}, {}, {}  }] = ((testData[{ {}, {i}, {}, {}  }])/255)
+end
+
 -------------------added data augmantation----------------------------------
 do -- data augmentation module
   local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
@@ -35,15 +45,30 @@ do -- data augmentation module
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)
       for i=1, bs do
+      	image.yuv2rgb(input[i],input[i])
+				
+	local mean = {}  -- store the mean, to normalize the test set in the future
+	local stdv  = {} -- store the standard-deviation for the future
+	for i=1,3 do -- over each image channel
+    		mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
+    		print('Channel ' .. i .. ', Mean: ' .. mean[i])
+    		trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
+    
+    		stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
+    		print('Channel ' .. i .. ', Standard Deviation: ' .. stdv[i])
+    		trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
+	end
+
+-- Normalize test set using same values
+
+	for i=1,3 do -- over each image channel
+    		testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
+    		testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
+	end
        if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
-	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
-	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
-	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],input[i],tl,32,32) end
-	--if (flip_mask[i] % 4 == 2) then image.rotate(input[i],input[i],1.57079633) end
-	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
-    end
-    end
-    self.output:set(input:cuda())
+    	end
+    	end
+    	self.output:set(input:cuda())
     return self.output
   end
 end
@@ -55,27 +80,9 @@ end
 
 -- Load and normalize data:
 
-local redChannel = trainData[{ {}, {1}, {}, {}  }] -- this picks {all images, 1st channel, all vertical pixels, all horizontal pixels}
-print(#redChannel)
+--local redChannel = trainData[{ {}, {1}, {}, {}  }] -- this picks {all images, 1st channel, all vertical pixels, all horizontal pixels}
+--print(#redChannel)
 
-local mean = {}  -- store the mean, to normalize the test set in the future
-local stdv  = {} -- store the standard-deviation for the future
-for i=1,3 do -- over each image channel
-    mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
-    print('Channel ' .. i .. ', Mean: ' .. mean[i])
-    trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
-    
-    stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
-    print('Channel ' .. i .. ', Standard Deviation: ' .. stdv[i])
-    trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
-end
-
--- Normalize test set using same values
-
-for i=1,3 do -- over each image channel
-    testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
-    testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
-end
 
 
 --  ****************************************************************
