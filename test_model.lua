@@ -19,8 +19,6 @@ local trainLabels = trainset.label:float():add(1)
 local testData = testset.data:float()
 local testLabels = testset.label:float():add(1)
 
-print(trainData:size())
-
 -------------------added data augmantation----------------------------------
 do -- data augmentation module
   local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
@@ -36,11 +34,6 @@ do -- data augmentation module
       local flip_mask = torch.randperm(bs)
       for i=1, bs do
        if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
-	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
-	--if (flip_mask[i] % 3 == 1) then image.vflip(input[i],input[i]) end
-	--if (flip_mask[i] % 6 == 2) then image.RandomCrop(input[i],input[i],tl,32,32) end
-	--if (flip_mask[i] % 4 == 2) then image.rotate(input[i],input[i],1.57079633) end
-	--if (flip_mask[i] % 6 == 4) then image.minmax(input[i]) end
     end
     end
     self.output:set(input:cuda())
@@ -64,11 +57,11 @@ local mean = {}  -- store the mean, to normalize the test set in the future
 local stdv  = {} -- store the standard-deviation for the future
 for i=1,3 do -- over each image channel
     mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
-    print('Channel ' .. i .. ', Mean: ' .. mean[i])
+    --print('Channel ' .. i .. ', Mean: ' .. mean[i])
     trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
     
     stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
-    print('Channel ' .. i .. ', Standard Deviation: ' .. stdv[i])
+    --print('Channel ' .. i .. ', Standard Deviation: ' .. stdv[i])
     trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 end
 
@@ -97,7 +90,6 @@ function TestModel()
         numBatches = numBatches + 1
         local x = testData:narrow(1, i, batchSize)
         local yt = testLabels:narrow(1, i, batchSize)
-	print('start model')
         local y = model:forward(x)
         local err = criterion:forward(y, yt)
         lossAcc = lossAcc + err
