@@ -44,7 +44,7 @@ end
 
 
 
-model = torch.load('ConvClassifierModel8_2.t7')
+model = torch.load('ConvClassifierFinalModel.t7')
 
 trainset = torch.load('cifar.torch/cifar10-train.t7')
 testset = torch.load('cifar.torch/cifar10-test.t7')
