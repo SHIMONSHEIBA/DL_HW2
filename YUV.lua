@@ -26,11 +26,11 @@ print(trainData:size())
 for i=1,3 do -- over each image channel
     trainData[{ {}, {i}, {}, {}  }] = ((trainData[{ {}, {i}, {}, {}  }])/255)
 end
-
+print('train is between 0 to 1')
 for i=1,3 do -- over each image channel
     testData[{ {}, {i}, {}, {}  }] = ((testData[{ {}, {i}, {}, {}  }])/255)
 end
-
+print('test is between 0 to 1')
 -------------------added data augmantation----------------------------------
 do -- data augmentation module
   local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
@@ -60,11 +60,13 @@ do -- data augmentation module
     		testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
     		testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 	end
+	print('now lets see YUV')
        if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
     	end
     	end
     	self.output:set(input:cuda())
     return self.output
+print('augmantation is done')
   end
 end
 -----------------------------------------------------------------------------------
