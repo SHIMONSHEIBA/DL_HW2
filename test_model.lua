@@ -42,12 +42,10 @@ do -- data augmentation module
 end
 
 
-
-
 model = torch.load('ConvClassifierFinalModel.t7')
 
-trainset = torch.load('cifar.torch/cifar10-train.t7')
-testset = torch.load('cifar.torch/cifar10-test.t7')
+--trainset = torch.load('cifar.torch/cifar10-train.t7')
+--testset = torch.load('cifar.torch/cifar10-test.t7')
 
 
 local redChannel = trainData[{ {}, {1}, {}, {}  }] -- this picks {all images, 1st channel, all vertical pixels, all horizontal pixels}
@@ -70,8 +68,6 @@ for i=1,3 do -- over each image channel
     testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
     testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 end
-
-
 
 
 function TestModel()
