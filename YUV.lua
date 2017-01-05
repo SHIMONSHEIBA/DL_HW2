@@ -120,7 +120,7 @@ print('Number of parameters:', w:nElement())
 print(model)
 
 --Create a log file to save the results
-local f = assert(io.open('logFileBestModel.log', 'w'), 'Failed to open input file')
+local f = assert(io.open('logFileYUV.log', 'w'), 'Failed to open input file')
    f:write('Number of parameters: ')
    f:write(w:nElement())
    f:write('\n The criterion is: CrossEntropyCriterion')
@@ -227,7 +227,7 @@ local WritetrainError = trainError[e]
 local WritetrainLoss = trainLoss[e] 
 local WritetestError = testError[e]
 local WritetestLoss = testLoss[e]
-local f = assert(io.open('logFileBestModel.log', 'a+'), 'Failed to open input file')
+local f = assert(io.open('logFileYUV.log', 'a+'), 'Failed to open input file')
    if e > 1 then
 	--print('test Error: ')
 	--print(testError[e])
@@ -236,7 +236,7 @@ local f = assert(io.open('logFileBestModel.log', 'a+'), 'Failed to open input fi
 	if (testError[e] < bestError) then
 	    bestError = testError[e]
 	    print('Better error : save the model')
-	    torch.save('ConvClassifierModeBestModel.t7', model)
+	    torch.save('ConvClassifierYUV.t7', model)
 
 	    f:write('Epoc ' .. e .. ': \n')
 	    WritetrainError = trainError[e]
@@ -248,7 +248,7 @@ local f = assert(io.open('logFileBestModel.log', 'a+'), 'Failed to open input fi
 	end
     else
        print('Better error : save the model')
-       torch.save('ConvClassifierBestModel.t7', model)
+       torch.save('ConvClassifierYUV.t7', model)
        f:write('Epoc ' .. e .. ': \n')
        WritetrainError = trainError[e]
        WritetrainLoss = trainLoss[e] 
