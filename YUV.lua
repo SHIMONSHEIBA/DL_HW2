@@ -51,16 +51,11 @@ do -- data augmentation module
 	local stdv  = {} -- store the standard-deviation for the future
 	for i=1,3 do -- over each image channel
     		mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
-    		print('Channel ' .. i .. ', Mean: ' .. mean[i])
     		trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
-    
     		stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
-    		print('Channel ' .. i .. ', Standard Deviation: ' .. stdv[i])
     		trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
 	end
-
 -- Normalize test set using same values
-
 	for i=1,3 do -- over each image channel
     		testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
     		testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
