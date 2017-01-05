@@ -25,7 +25,7 @@ print(trainData:size())
 
 trainData:div(255)
 testData:div(255)
-print(trainData[2][4][4][4])
+--print(trainData[2][4][4][4])
 print('divided to 255')
 local trainSize = trainData:size(1)
 for i=1, trainSize do	
