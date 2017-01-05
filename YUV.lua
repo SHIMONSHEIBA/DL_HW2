@@ -23,18 +23,19 @@ print(trainData:size())
 
 ------------------------------------normlize to 0-255----------------------------------------------------------------------------------
 
---for i=1,3 do -- over each image channel
---    trainData[{ {}, {i}, {}, {}  }] = trainData[{ {}, {i}, {}, {}  }]/255
---end
-print('train is between 0 to 1')
-print(trainData[{ {1}, {1}, {1}, {1}  }]:size())
---for i=1,3 do -- over each image channel
---    testData[{ {}, {i}, {}, {}  }] = testData[{ {}, {i}, {}, {}  }]/255
---end
-print('test is between 0 to 1')
-
---image.rgb2yuv(input[i],input[i])
-
+trainData:div(255)
+testData:div(255)
+print(trainData[2][4][4][4])
+print('divided to 255')
+local trainSize = trainData:size(1)
+for i=1, trainSize do	
+	image.rgb2yuv(trainData[i],trainData[i])
+end
+local testSize = testData:size(1)
+for i=1, testSize do	
+	image.rgb2yuv(testData[i],testData[i])
+end
+print('finished yuv')
 
 local mean = {}  -- store the mean, to normalize the test set in the future
 local stdv  = {} -- store the standard-deviation for the future
