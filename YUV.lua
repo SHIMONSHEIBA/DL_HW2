@@ -65,8 +65,9 @@ do -- data augmentation module
     	end
     	end
     	self.output:set(input:cuda())
+		print('augmantation is done')
     return self.output
-print('augmantation is done')
+	
   end
 end
 -----------------------------------------------------------------------------------
