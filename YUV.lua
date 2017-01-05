@@ -272,7 +272,7 @@ end
 function plotError(trainError, testError, title)
 	require 'gnuplot'
 	local range = torch.range(1, trainError:size(1))
-	gnuplot.pngfigure('testVsTrainError.png')
+	gnuplot.pngfigure('testVsTrainErrorYUV.png')
 	gnuplot.plot({'trainError',trainError},{'testError',testError})
 	gnuplot.xlabel('epochs')
 	gnuplot.ylabel('Error')
@@ -283,13 +283,13 @@ plotError(trainError, testError, 'Classification Error')
 
 require 'gnuplot'
 local range = torch.range(1, epochs)
-gnuplot.pngfigure('lossBestModel.png')
+gnuplot.pngfigure('lossBestModelYUV.png')
 gnuplot.plot({'trainLoss',trainLoss},{'testLoss',testLoss})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Loss')
 gnuplot.plotflush()
 
-gnuplot.pngfigure('errorBestModel.png')
+gnuplot.pngfigure('errorBestModelYUV.png')
 gnuplot.plot({'trainError',trainError},{'testError',testError})
 gnuplot.xlabel('epochs')
 gnuplot.ylabel('Error')
