@@ -23,14 +23,33 @@ print(trainData:size())
 
 ------------------------------------normlize to 0-255----------------------------------------------------------------------------------
 
-for i=1,3 do -- over each image channel
-    trainData[{ {}, {i}, {}, {}  }] = ((trainData[{ {}, {i}, {}, {}  }])/255)
-end
+--for i=1,3 do -- over each image channel
+--    trainData[{ {}, {i}, {}, {}  }] = trainData[{ {}, {i}, {}, {}  }]/255
+--end
 print('train is between 0 to 1')
-for i=1,3 do -- over each image channel
-    testData[{ {}, {i}, {}, {}  }] = ((testData[{ {}, {i}, {}, {}  }])/255)
-end
+print(trainData[{ {}, {i}, {}, {}  }])
+--for i=1,3 do -- over each image channel
+--    testData[{ {}, {i}, {}, {}  }] = testData[{ {}, {i}, {}, {}  }]/255
+--end
 print('test is between 0 to 1')
+
+--image.rgb2yuv(input[i],input[i])
+
+
+local mean = {}  -- store the mean, to normalize the test set in the future
+local stdv  = {} -- store the standard-deviation for the future
+for i=1,3 do -- over each image channel
+    	mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
+    	trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
+    	stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
+    	trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
+end
+-- Normalize test set using same values
+for i=1,3 do -- over each image channel
+    	testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
+    	testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
+end
+print('now lets see YUV')
 -------------------added data augmantation----------------------------------
 do -- data augmentation module
   local BatchFlip,parent = torch.class('nn.BatchFlip', 'nn.Module')
@@ -44,30 +63,12 @@ do -- data augmentation module
     if self.train then
       local bs = input:size(1)
       local flip_mask = torch.randperm(bs)
-      for i=1, bs do
-      	image.yuv2rgb(input[i],input[i])
-				
-	local mean = {}  -- store the mean, to normalize the test set in the future
-	local stdv  = {} -- store the standard-deviation for the future
-	for i=1,3 do -- over each image channel
-    		mean[i] = trainData[{ {}, {i}, {}, {}  }]:mean() -- mean estimation
-    		trainData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction
-    		stdv[i] = trainData[{ {}, {i}, {}, {}  }]:std() -- std estimation
-    		trainData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
-	end
--- Normalize test set using same values
-	for i=1,3 do -- over each image channel
-    		testData[{ {}, {i}, {}, {}  }]:add(-mean[i]) -- mean subtraction    
-    		testData[{ {}, {i}, {}, {}  }]:div(stdv[i]) -- std scaling
-	end
-	print('now lets see YUV')
+      for i=1, bs do		
        if (flip_mask[i] % 3 == 0) then image.hflip(input[i],input[i]) end
     	end
     	end
     	self.output:set(input:cuda())
-		print('augmantation is done')
     return self.output
-	
   end
 end
 -----------------------------------------------------------------------------------
