@@ -44,10 +44,6 @@ end
 
 model = torch.load('ConvClassifierFinalModel.t7')
 
---trainset = torch.load('cifar.torch/cifar10-train.t7')
---testset = torch.load('cifar.torch/cifar10-test.t7')
-
-
 local redChannel = trainData[{ {}, {1}, {}, {}  }] -- this picks {all images, 1st channel, all vertical pixels, all horizontal pixels}
 
 local mean = {}  -- store the mean, to normalize the test set in the future
